@@ -28,16 +28,17 @@
         body { background-color: var(--dark-bg); color: var(--text-main); padding-bottom: 60px; -webkit-tap-highlight-color: transparent; }
 
         /* Luxury Splash Animation Screen */
-        #splashScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #1a1a1a 0%, #000000 100%); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.8s ease; }
-        .splash-logo-box { position: relative; width: 140px; height: 140px; display: flex; justify-content: center; align-items: center; }
-        .splash-logo-box i.fa-utensils { font-size: 4rem; color: var(--gold); position: absolute; animation: crossCut 1.8s ease infinite alternate; }
-        .splash-logo-box i.fa-hat-chef { font-size: 4.5rem; color: #fff; z-index: 2; position: absolute; animation: chefBounce 1.8s ease infinite alternate; }
-        .splash-title { margin-top: 30px; font-size: 2.1rem; font-weight: 800; color: var(--gold); letter-spacing: 3px; text-transform: uppercase; animation: zoomInText 1.2s ease; text-align: center; }
-        .splash-subtitle { margin-top: 8px; font-size: 1rem; color: #ccc; letter-spacing: 1px; animation: fadeInText 1.5s ease; }
+        #splashScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #1a1a1a 0%, #000000 100%); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.8s ease; border: 4px solid var(--gold); }
+        .splash-logo-box { position: relative; width: 130px; height: 130px; display: flex; justify-content: center; align-items: center; margin-bottom: 15px; }
+        .splash-logo-box i.fa-utensils { font-size: 3.8rem; color: var(--gold); position: absolute; animation: crossCut 1.8s ease infinite alternate; }
+        .splash-logo-box i.fa-hat-chef { font-size: 4.2rem; color: #fff; z-index: 2; position: absolute; animation: chefBounce 1.8s ease infinite alternate; }
+        
+        .splash-welcome-text { text-align: center; color: #fff; animation: fadeInText 1.2s ease; padding: 0 20px; }
+        .splash-welcome-text h2 { font-size: 1.8rem; color: var(--gold); margin-bottom: 5px; font-weight: 800; }
+        .splash-welcome-text p { font-size: 1rem; color: #ddd; margin: 3px 0; letter-spacing: 1px; }
 
         @keyframes crossCut { 0% { transform: rotate(-20deg) scale(0.9); } 100% { transform: rotate(20deg) scale(1.15); } }
         @keyframes chefBounce { 0% { transform: translateY(-5px); } 100% { transform: translateY(5px); } }
-        @keyframes zoomInText { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
         @keyframes fadeInText { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
         .app-container { width: 100%; max-width: 480px; margin: 0 auto; min-height: 100vh; background: var(--dark-bg); box-shadow: 0 0 40px rgba(0,0,0,0.15); position: relative; }
@@ -70,7 +71,7 @@
         .cat-btn { background: var(--card-light); border: 1px solid var(--border-color); color: var(--text-muted); padding: 9px 18px; border-radius: 20px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: all 0.2s ease; font-size: 0.9rem; }
         .cat-btn.active, .cat-btn:hover { background: var(--gold); color: #000; border-color: var(--gold); font-weight: 700; box-shadow: 0 4px 15px rgba(212,175,55,0.3); }
 
-        /* Menu Container Layouts (Uniform Grid & List) */
+        /* Menu Container Layouts */
         .menu-container { padding: 0 15px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
         .menu-container.list-view { grid-template-columns: 1fr !important; }
         @media (min-width: 768px) { .menu-container { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; padding: 0 20px; } }
@@ -85,9 +86,10 @@
         .card-img-box img { width: 100%; height: 100%; object-fit: cover; }
         .badge { position: absolute; top: 10px; right: 10px; background: var(--gold); color: #000; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: bold; z-index: 2; }
         
-        .out-of-stock-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 5; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 10px; }
-        .out-of-stock-badge { background: #e74c3c; color: #fff; padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: bold; margin-bottom: 5px; }
-        .out-of-stock-reason { font-size: 0.75rem; color: #ddd; }
+        /* Out of Stock Overlay on Photo */
+        .out-of-stock-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 5; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 10px; backdrop-filter: blur(2px); }
+        .out-of-stock-badge { background: #e74c3c; color: #fff; padding: 6px 14px; border-radius: 10px; font-size: 0.85rem; font-weight: bold; margin-bottom: 5px; letter-spacing: 0.5px; box-shadow: 0 4px 10px rgba(231,76,60,0.4); }
+        .out-of-stock-reason { font-size: 0.8rem; color: #ffeb3b; font-weight: 600; }
 
         .card-content { padding: 14px; display: flex; flex-direction: column; flex: 1; justify-content: space-between; }
         .card-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; color: var(--text-main); }
@@ -129,14 +131,18 @@
 </head>
 <body data-theme="light">
 
-    <!-- Luxury Splash Animation Screen -->
+    <!-- Luxury Splash Animation Screen with Multilingual Welcome -->
     <div id="splashScreen">
         <div class="splash-logo-box">
             <i class="fas fa-utensils"></i>
             <i class="fas fa-hat-chef"></i>
         </div>
-        <div class="splash-title">Hijra Restaurant</div>
-        <div class="splash-subtitle">Luxury Digital Menu & Experience</div>
+        <div class="splash-welcome-text">
+            <h2>Hijra Restaurant</h2>
+            <p>Welcome to Hijra Restaurant</p>
+            <p>أهلاً بكم في مطعم هجرة</p>
+            <p>欢迎光临希吉拉餐厅</p>
+        </div>
     </div>
 
     <div class="app-container">
@@ -275,7 +281,7 @@
                 const splash = document.getElementById('splashScreen');
                 splash.style.opacity = '0';
                 setTimeout(() => splash.style.display = 'none', 800);
-            }, 2500);
+            }, 2600);
             loadData();
         });
 
@@ -457,8 +463,8 @@
                             ${item.is_featured && isAvail ? '<span class="badge">Special</span>' : ''}
                             ${!isAvail ? `
                                 <div class="out-of-stock-overlay">
-                                    <span class="out-of-stock-badge">OUT OF STOCK</span>
-                                    <span class="out-of-stock-reason">${item.unavailable_reason || 'ለጊዜው አልቋል'}</span>
+                                    <span class="out-of-stock-badge">ለጊዜው አልቋል (Out of Stock)</span>
+                                    <span class="out-of-stock-reason">${item.unavailable_reason || 'በቅርቡ ይመለሳል'}</span>
                                 </div>
                             ` : ''}
                         </div>
