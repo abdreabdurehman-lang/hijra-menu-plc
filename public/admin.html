@@ -1,341 +1,213 @@
 <!DOCTYPE html>
-<html lang="am">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Luxury Admin Dashboard</title>
+    <title>Luxury Admin Dashboard - Hijra Restaurant</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --gold: #d4af37; --dark: #121212; --card-bg: #1e1e1e; --text-light: #f8f9fa; --text-muted: #adb5bd; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
         body { background-color: var(--dark); color: var(--text-light); padding: 20px; }
-
-        .container { max-width: 900px; margin: 0 auto; }
-        
-        .admin-header { background: linear-gradient(135deg, #000, #1a1a1a); color: white; padding: 25px; border-radius: 16px; margin-bottom: 25px; border: 1px solid rgba(212,175,55,0.3); display: flex; justify-content: space-between; align-items: center; }
-        .admin-header h1 { font-size: 1.5rem; font-weight: 700; color: var(--gold); }
-        .view-menu-btn { background: var(--gold); color: #000; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-weight: 700; font-size: 0.9rem; }
-
-        .card-section { background: var(--card-bg); border-radius: 16px; padding: 25px; margin-bottom: 25px; border: 1px solid #2a2a2a; }
-        .card-section h2 { font-size: 1.2rem; margin-bottom: 20px; color: var(--gold); display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #2a2a2a; padding-bottom: 10px; }
-
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-bottom: 15px; }
-        .form-group { display: flex; flex-direction: column; gap: 6px; }
-        .form-group.full { grid-column: 1 / -1; }
-        label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
-        input, textarea { padding: 12px 15px; border: 1px solid #333; border-radius: 10px; font-size: 0.95rem; outline: none; background: #252525; color: #fff; }
-        input:focus, textarea:focus { border-color: var(--gold); }
-        textarea { resize: vertical; min-height: 80px; }
-        
-        .checkbox-group { display: flex; align-items: center; gap: 10px; margin: 10px 0; font-weight: 600; cursor: pointer; color: #fff; }
-        .checkbox-group input { width: 18px; height: 18px; accent-color: var(--gold); }
-
-        .btn { background: var(--gold); color: #000; border: none; padding: 12px 20px; border-radius: 10px; font-weight: 700; font-size: 1rem; cursor: pointer; }
-        .btn:hover { opacity: 0.9; }
-        .btn-blue { background: #1d3557; color: #fff; }
-
-        .table-responsive { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #2a2a2a; font-size: 0.9rem; }
-        th { background: #181818; font-weight: 700; color: var(--gold); }
-        .food-thumb { width: 45px; height: 45px; object-fit: cover; border-radius: 8px; border: 1px solid var(--gold); }
-        .del-btn { background: #e63946; color: white; border: none; padding: 6px 12px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.8rem; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .admin-header { background: linear-gradient(135deg, #000, #1a1a1a); padding: 25px; border-radius: 16px; border: 2px solid var(--gold); text-align: center; margin-bottom: 25px; box-shadow: 0 10px 30px rgba(212,175,55,0.15); }
+        .admin-header h1 { color: var(--gold); font-size: 2rem; margin-bottom: 5px; }
+        .section { background: var(--card-bg); border: 1px solid #333; padding: 20px; border-radius: 16px; margin-bottom: 25px; }
+        .section h2 { color: var(--gold); font-size: 1.3rem; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 15px; }
+        input, select, textarea { width: 100%; padding: 12px; background: #121212; border: 1px solid #444; color: #fff; border-radius: 10px; outline: none; font-size: 0.95rem; }
+        input:focus, select:focus, textarea:focus { border-color: var(--gold); }
+        textarea { resize: vertical; height: 80px; }
+        .btn { background: var(--gold); color: #000; border: none; padding: 12px 25px; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .btn:hover { opacity: 0.9; transform: translateY(-2px); }
+        .btn-danger { background: #e74c3c; color: #fff; padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; border: none; cursor: pointer; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #333; }
+        th { color: var(--gold); background: #181818; }
+        .badge-special { background: var(--gold); color: #000; padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: bold; }
+        .feedback-card { background: #181818; border: 1px solid #333; padding: 15px; border-radius: 10px; margin-bottom: 10px; }
+        .feedback-header { display: flex; justify-content: space-between; margin-bottom: 6px; font-weight: bold; color: var(--gold); }
     </style>
 </head>
 <body>
-
     <div class="container">
-        
         <div class="admin-header">
-            <h1><i class="fas fa-sliders-h"></i> የማናጀር መቆጣጠሪያ ዳሽቦርድ</h1>
-            <a href="/" target="_blank" class="view-menu-btn"><i class="fas fa-external-link-alt"></i> ሜኑውን እይ</a>
+            <h1><i class="fas fa-crown"></i> Hijra Restaurant Admin Dashboard</h1>
+            <p>Manage your menu items, payments, and customer feedbacks easily.</p>
         </div>
 
-        <!-- 1. Add Food Form -->
-        <div class="card-section">
-            <h2><i class="fas fa-plus-circle" style="color: var(--gold);"></i> አዲስ ምግብ ወይም መጠጥ መዝግብ</h2>
-            <form id="foodForm" onsubmit="addFood(event)">
+        <!-- Add Menu Item -->
+        <div class="section">
+            <h2><i class="fas fa-utensils"></i> Add Menu Item / Food / Drink</h2>
+            <form id="menuForm" onsubmit="addMenu(event)">
                 <div class="form-grid">
-                    <div class="form-group">
-                        <label>የምግብ ስም</label>
-                        <input type="text" id="title" placeholder="ለምሳሌ፡ ስፔሻል በርገር" required>
-                    </div>
-                    <div class="form-group">
-                        <label>ምድብ (Category)</label>
-                        <input type="text" id="category" placeholder="ለምሳሌ፡ Breakfast, Lunch, Drinks" required>
-                    </div>
-                    <div class="form-group">
-                        <label>ዋጋ (በብር)</label>
-                        <input type="number" id="price" placeholder="0.00" step="0.01" required>
-                    </div>
-                    <div class="form-group">
-                        <label>የምግብ ፎቶ (ጋለሪ ወይም ፋይል)</label>
-                        <input type="file" id="imageFile" accept="image/*" required>
-                    </div>
-                    <div class="form-group full">
-                        <label>አጭር መግለጫ</label>
-                        <textarea id="description" placeholder="ስለ ምግቡ ዝርዝር መግለጫ ጻፍ..."></textarea>
-                    </div>
+                    <input type="text" id="title" placeholder="Food/Drink Name (e.g. Mandi)" required>
+                    <input type="text" id="category" placeholder="Category (e.g. Lunch, Drinks)" required>
+                    <input type="number" step="0.01" id="price" placeholder="Price (Birr)" required>
+                    <select id="is_featured">
+                        <option value="0">Normal Item</option>
+                        <option value="1">⭐ Today's Special (Featured Slider)</option>
+                    </select>
                 </div>
-                <label class="checkbox-group">
-                    <input type="checkbox" id="is_featured">
-                    የዛሬ ልዩ የምግብ ጥቆማ (Featured Special Banner) አድርገው
-                </label>
-                <button type="submit" class="btn">ምግብ መዝግብ</button>
+                <textarea id="description" placeholder="Description..."></textarea>
+                <div style="margin: 15px 0;">
+                    <label style="display: block; margin-bottom: 5px; color: var(--text-muted);">Food/Drink Image:</label>
+                    <input type="file" id="imageFile" accept="image/*" required>
+                </div>
+                <button type="submit" class="btn"><i class="fas fa-plus"></i> Add Item</button>
             </form>
         </div>
 
-        <!-- 2. Settings & Socials -->
-        <div class="card-section">
-            <h2><i class="fas fa-cog" style="color: var(--gold);"></i> የሬስቶራንት ስም፣ ሰዓት፣ አድራሻ እና ሶሻል ሚዲያ ቅንብሮች</h2>
-            <div class="form-grid">
-                <div class="form-group">
-                    <label>የሬስቶራንቱ ስም</label>
-                    <input type="text" id="set_name" placeholder="Hijra Restaurant">
-                </div>
-                <div class="form-group">
-                    <label>የመግለጫ ጽሁፍ (Subtitle/Bio)</label>
-                    <input type="text" id="set_subtitle" placeholder="Delicious food that makes your life wonderful!">
-                </div>
-                <div class="form-group">
-                    <label>የስራ ሰዓት (Working Hours)</label>
-                    <input type="text" id="set_hours" placeholder="08:00 AM - 10:00 PM">
-                </div>
-                <div class="form-group">
-                    <label>አድራሻ (Address/Location)</label>
-                    <input type="text" id="set_address" placeholder="Addis Ababa, Ethiopia">
-                </div>
-                <div class="form-group">
-                    <label>የፌስቡክ ሊንክ</label>
-                    <input type="text" id="set_fb" placeholder="https://facebook.com/...">
-                </div>
-                <div class="form-group">
-                    <label>የቲክቶክ ሊንክ</label>
-                    <input type="text" id="set_tiktok" placeholder="https://tiktok.com/@...">
-                </div>
-                <div class="form-group">
-                    <label>የኢንስታግራም ሊንክ</label>
-                    <input type="text" id="set_insta" placeholder="https://instagram.com/...">
-                </div>
-                <div class="form-group">
-                    <label>የዋትስአፕ ሊንክ</label>
-                    <input type="text" id="set_whatsapp" placeholder="https://wa.me/...">
-                </div>
-                <div class="form-group">
-                    <label>ኢሜይል አድራሻ</label>
-                    <input type="text" id="set_email" placeholder="example@gmail.com">
-                </div>
-                <div class="form-group">
-                    <label>የዲቬሎፐር/ባለቤት ሊንክ</label>
-                    <input type="text" id="set_dev" placeholder="https://wa.me/yournumber">
-                </div>
+        <!-- Manage Menu Items -->
+        <div class="section">
+            <h2><i class="fas fa-list"></i> Existing Menu Items</h2>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Special</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="menuTableBody"></tbody>
+                </table>
             </div>
-            <button onclick="saveSettings()" class="btn" style="margin-top: 15px;">ቅንብሮችን አስቀምጥ</button>
         </div>
 
-        <!-- 3. Payments Manager -->
-        <div class="card-section">
-            <h2><i class="fas fa-wallet" style="color: var(--gold);"></i> የክፍያ አማራጮች ማስተዳደሪያ (ቴሌብር/ባንኮች)</h2>
+        <!-- Payment Options -->
+        <div class="section">
+            <h2><i class="fas fa-wallet"></i> Manage Payment Options (CBE, Telebirr, etc.)</h2>
             <form id="paymentForm" onsubmit="addPayment(event)">
                 <div class="form-grid">
-                    <div class="form-group">
-                        <label>የባንክ ወይም የኪስ ቦርሳ ስም</label>
-                        <input type="text" id="bank_name" placeholder="ለምሳሌ፡ Telebirr ወይም CBE" required>
-                    </div>
-                    <div class="form-group">
-                        <label>የአካውንት ቁጥር</label>
-                        <input type="text" id="account_number" placeholder="0911223344 / 1000..." required>
-                    </div>
-                    <div class="form-group">
-                        <label>የአካውንት ባለቤት ስም</label>
-                        <input type="text" id="account_holder" placeholder="የባለቤቱ ስም">
-                    </div>
+                    <input type="text" id="bankName" placeholder="Bank Name (e.g. CBE / Telebirr)" required>
+                    <input type="text" id="accountNumber" placeholder="Account Number" required>
+                    <input type="text" id="accountHolder" placeholder="Account Holder Name (Name)" required>
                 </div>
-                <button type="submit" class="btn" style="background: var(--gold);">የክፍያ አማራጭ ጨምር</button>
+                <button type="submit" class="btn"><i class="fas fa-plus"></i> Add Payment Account</button>
             </form>
-
-            <div class="table-responsive" style="margin-top: 20px;">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ባንክ/አገልግሎት</th>
-                            <th>አካውንት ቁጥር</th>
-                            <th>ባለቤት</th>
-                            <th>እርምጃ</th>
-                        </tr>
-                    </thead>
-                    <tbody id="payment-table">
-                        <tr><td colspan="4" style="text-align: center; color: var(--text-muted);">መረጃዎች እየተጫኑ ነው...</td></tr>
-                    </tbody>
-                </table>
-            </div>
+            <div style="margin-top: 15px;" id="paymentList"></div>
         </div>
 
-        <!-- 4. Menu Table -->
-        <div class="card-section">
-            <h2><i class="fas fa-utensils" style="color: var(--gold);"></i> የተመዘገቡ ምግቦች ዝርዝር</h2>
-            <div class="table-responsive">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ፎቶ</th>
-                            <th>ስም</th>
-                            <th>ምድብ</th>
-                            <th>ዋጋ</th>
-                            <th>ልዩ?</th>
-                            <th>እርምጃ</th>
-                        </tr>
-                    </thead>
-                    <tbody id="admin-table">
-                        <tr><td colspan="6" style="text-align: center; color: var(--text-muted);">መረጃዎች እየተጫኑ ነው...</td></tr>
-                    </tbody>
-                </table>
+        <!-- Customer Feedbacks & Ratings -->
+        <div class="section">
+            <h2><i class="fas fa-comments"></i> Customer Feedbacks & Ratings</h2>
+            <div id="feedbackContainer">
+                <p style="color: var(--text-muted);">Loading feedbacks...</p>
             </div>
         </div>
-
     </div>
 
     <script>
         async function loadAdminData() {
-            try {
-                const [menuRes, settingsRes, paymentRes] = await Promise.all([
-                    fetch('/api/menu'),
-                    fetch('/api/settings'),
-                    fetch('/api/payments')
-                ]);
-                const data = await menuRes.json();
-                const settings = await settingsRes.json();
-                const payments = await paymentRes.json();
+            // Menu
+            const resMenu = await fetch('/api/menu');
+            const menu = await resMenu.json();
+            const tbody = document.getElementById('menuTableBody');
+            tbody.innerHTML = '';
+            menu.forEach(item => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td><img src="${item.image_url || 'https://via.placeholder.com/50'}" style="width:40px; height:40px; object-fit:cover; border-radius:6px;"></td>
+                        <td><strong>${item.title}</strong></td>
+                        <td>${item.category}</td>
+                        <td>${item.price} Birr</td>
+                        <td>${item.is_featured ? '<span class="badge-special">Special</span>' : '-'}</td>
+                        <td><button class="btn-danger" onclick="deleteMenu(${item.id})"><i class="fas fa-trash"></i></button></td>
+                    </tr>
+                `;
+            });
 
-                document.getElementById('set_name').value = settings.restaurant_name || '';
-                document.getElementById('set_subtitle').value = settings.subtitle || '';
-                document.getElementById('set_hours').value = settings.working_hours || '';
-                document.getElementById('set_address').value = settings.address || '';
-                document.getElementById('set_fb').value = settings.social_facebook || '';
-                document.getElementById('set_tiktok').value = settings.social_tiktok || '';
-                document.getElementById('set_insta').value = settings.social_instagram || '';
-                document.getElementById('set_whatsapp').value = settings.social_whatsapp || '';
-                document.getElementById('set_email').value = settings.social_email || '';
-                document.getElementById('set_dev').value = settings.developer_link || '';
+            // Payments
+            const resPay = await fetch('/api/payments');
+            const payments = await resPay.json();
+            const payList = document.getElementById('paymentList');
+            payList.innerHTML = '';
+            payments.forEach(p => {
+                payList.innerHTML += `
+                    <div style="display: flex; justify-content: space-between; align-items: center; background: #121212; padding: 10px; border-radius: 8px; margin-bottom: 8px; border: 1px solid #333;">
+                        <div><strong>${p.bank_name}</strong> - Account: ${p.account_number} - <em>Name: ${p.account_holder || ''}</em></div>
+                        <button class="btn-danger" onclick="deletePayment(${p.id})">Delete</button>
+                    </div>
+                `;
+            });
 
-                const table = document.getElementById('admin-table');
-                table.innerHTML = '';
-                if(data.length === 0) {
-                    table.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-muted);">ምንም የተመዘገበ ምግብ የለም</td></tr>`;
-                } else {
-                    data.forEach(item => {
-                        table.innerHTML += `
-                            <tr>
-                                <td><img src="${item.image_url || 'https://via.placeholder.com/50'}" class="food-thumb" alt=""></td>
-                                <td><strong>${item.title}</strong></td>
-                                <td>${item.category}</td>
-                                <td style="color: var(--gold); font-weight: bold;">${item.price} Birr</td>
-                                <td>${item.is_featured ? '<span style="background:var(--gold); color:#000; padding:2px 8px; border-radius:6px; font-size:0.75rem; font-weight:bold;">Yes</span>' : 'No'}</td>
-                                <td><button class="del-btn" onclick="deleteFood(${item.id})"><i class="fas fa-trash"></i> አጥፋ</button></td>
-                            </tr>
-                        `;
-                    });
-                }
-
-                const payTable = document.getElementById('payment-table');
-                payTable.innerHTML = '';
-                if(payments.length === 0) {
-                    payTable.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--text-muted);">ምንም የክፍያ አካውንት የለም</td></tr>`;
-                } else {
-                    payments.forEach(p => {
-                        payTable.innerHTML += `
-                            <tr>
-                                <td><strong>${p.bank_name}</strong></td>
-                                <td>${p.account_number}</td>
-                                <td>${p.account_holder || '-'}</td>
-                                <td><button class="del-btn" onclick="deletePayment(${p.id})"><i class="fas fa-trash"></i> አጥፋ</button></td>
-                            </tr>
-                        `;
-                    });
-                }
-
-            } catch(err) {
-                console.error("Error loading data:", err);
+            // Feedbacks
+            const resFb = await fetch('/api/feedback');
+            const feedbacks = await resFb.json();
+            const fbContainer = document.getElementById('feedbackContainer');
+            fbContainer.innerHTML = '';
+            if(feedbacks.length === 0) {
+                fbContainer.innerHTML = `<p style="color: var(--text-muted);">No feedback received yet.</p>`;
+            } else {
+                feedbacks.forEach(f => {
+                    fbContainer.innerHTML += `
+                        <div class="feedback-card">
+                            <div class="feedback-header">
+                                <span><i class="fas fa-user"></i> ${f.name} (${f.contact})</span>
+                                <span style="color: var(--gold);">${f.rating}</span>
+                            </div>
+                            <p style="color: #ddd; margin-bottom: 8px;">${f.message}</p>
+                            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: #888;">
+                                <span>${f.created_at}</span>
+                                <button class="btn-danger" onclick="deleteFeedback(${f.id})">Delete</button>
+                            </div>
+                        </div>
+                    `;
+                });
             }
         }
 
-        async function addFood(e) {
+        async function addMenu(e) {
             e.preventDefault();
             const formData = new FormData();
             formData.append('title', document.getElementById('title').value);
             formData.append('category', document.getElementById('category').value);
             formData.append('price', document.getElementById('price').value);
             formData.append('description', document.getElementById('description').value);
-            formData.append('is_featured', document.getElementById('is_featured').checked ? 1 : 0);
-            
-            const imageFile = document.getElementById('imageFile').files[0];
-            if(imageFile) formData.append('image', imageFile);
+            formData.append('is_featured', document.getElementById('is_featured').value);
+            formData.append('image', document.getElementById('imageFile').files[0]);
 
             const res = await fetch('/api/menu', { method: 'POST', body: formData });
-            if(res.ok) {
-                alert('ምግቡ በስኬት ተመዝግቧል!');
-                document.getElementById('foodForm').reset();
-                loadAdminData();
-            } else {
-                alert('ስህተት ተፈጥሯል!');
-            }
+            if(res.ok) { alert('Menu item added successfully!'); location.reload(); }
+            else { alert('Error adding item'); }
         }
 
-        async function saveSettings() {
-            const settings = {
-                restaurant_name: document.getElementById('set_name').value,
-                subtitle: document.getElementById('set_subtitle').value,
-                working_hours: document.getElementById('set_hours').value,
-                address: document.getElementById('set_address').value,
-                social_facebook: document.getElementById('set_fb').value,
-                social_tiktok: document.getElementById('set_tiktok').value,
-                social_instagram: document.getElementById('set_insta').value,
-                social_whatsapp: document.getElementById('set_whatsapp').value,
-                social_email: document.getElementById('set_email').value,
-                developer_link: document.getElementById('set_dev').value,
-                theme_color: '#d4af37'
-            };
-
-            const res = await fetch('/api/settings', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(settings)
-            });
-
-            if(res.ok) alert('ቅንብሮቹ በስኬት ተስተካክለዋል!');
+        async function deleteMenu(id) {
+            if(confirm('Are you sure to delete this item?')) {
+                await fetch(`/api/menu/${id}`, { method: 'DELETE' });
+                loadAdminData();
+            }
         }
 
         async function addPayment(e) {
             e.preventDefault();
-            const payment = {
-                bank_name: document.getElementById('bank_name').value,
-                account_number: document.getElementById('account_number').value,
-                account_holder: document.getElementById('account_holder').value
+            const data = {
+                bank_name: document.getElementById('bankName').value,
+                account_number: document.getElementById('accountNumber').value,
+                account_holder: document.getElementById('accountHolder').value
             };
-
             const res = await fetch('/api/payments', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payment)
+                body: JSON.stringify(data)
             });
-
-            if(res.ok) {
-                alert('የክፍያ አማራጭ ተጨምሯል!');
-                document.getElementById('paymentForm').reset();
-                loadAdminData();
-            }
-        }
-
-        async function deleteFood(id) {
-            if(confirm('እርግጠኛ ነህ ይህንን ምግብ ማጥፋት ትፈልጋለህ?')) {
-                await fetch('/api/menu/' + id, { method: 'DELETE' });
-                loadAdminData();
-            }
+            if(res.ok) { alert('Payment added!'); location.reload(); }
         }
 
         async function deletePayment(id) {
-            if(confirm('እርግጠኛ ነህ ይህንን የክፍያ አማራጭ ማጥፋት ትፈልጋለህ?')) {
-                await fetch('/api/payments/' + id, { method: 'DELETE' });
+            if(confirm('Delete payment account?')) {
+                await fetch(`/api/payments/${id}`, { method: 'DELETE' });
+                loadAdminData();
+            }
+        }
+
+        async function deleteFeedback(id) {
+            if(confirm('Delete this feedback?')) {
+                await fetch(`/api/feedback/${id}`, { method: 'DELETE' });
                 loadAdminData();
             }
         }
