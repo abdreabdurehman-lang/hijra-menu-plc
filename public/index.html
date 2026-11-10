@@ -86,11 +86,6 @@
         .card-img-box img { width: 100%; height: 100%; object-fit: cover; }
         .badge { position: absolute; top: 10px; right: 10px; background: var(--gold); color: #000; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: bold; z-index: 2; }
         
-        /* Out of Stock Overlay on Photo */
-        .out-of-stock-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 5; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 10px; backdrop-filter: blur(2px); }
-        .out-of-stock-badge { background: #e74c3c; color: #fff; padding: 6px 14px; border-radius: 10px; font-size: 0.85rem; font-weight: bold; margin-bottom: 5px; letter-spacing: 0.5px; box-shadow: 0 4px 10px rgba(231,76,60,0.4); }
-        .out-of-stock-reason { font-size: 0.8rem; color: #ffeb3b; font-weight: 600; }
-
         .card-content { padding: 14px; display: flex; flex-direction: column; flex: 1; justify-content: space-between; }
         .card-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; color: var(--text-main); }
         .card-desc { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px; display: -webkit-box; line-clamp: 2; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
@@ -105,21 +100,12 @@
         .modal-img { width: 100%; height: 230px; object-fit: cover; border-radius: 16px; margin-bottom: 15px; border: 1px solid var(--gold); }
 
         .section-box { padding: 0 15px; margin: 30px 0; }
-        .payment-section, .feedback-section { background: var(--card-light); border: 1px solid var(--border-color); padding: 22px; border-radius: 16px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        .payment-section { background: var(--card-light); border: 1px solid var(--border-color); padding: 22px; border-radius: 16px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
         .section-box h3 { font-size: 1.15rem; margin-bottom: 15px; color: var(--gold); display: flex; align-items: center; gap: 10px; }
         .payment-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
         @media (min-width: 768px) { .payment-grid { grid-template-columns: repeat(2, 1fr); } }
         .payment-card { background: var(--dark-bg); border: 1px solid var(--border-color); padding: 15px; border-radius: 12px; font-size: 0.9rem; }
         .payment-card strong { color: var(--gold); font-size: 1rem; }
-
-        /* Feedback & Rating */
-        .rating-options { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
-        .rating-btn { flex: 1; min-width: 120px; background: var(--dark-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 10px; border-radius: 10px; cursor: pointer; text-align: center; font-size: 0.85rem; font-weight: 600; transition: 0.2s; }
-        .rating-btn.active, .rating-btn:hover { border-color: var(--gold); background: rgba(212,175,55,0.15); color: var(--gold); }
-        .feedback-form input, .feedback-form textarea { width: 100%; background: var(--dark-bg); border: 1px solid var(--border-color); padding: 12px 15px; border-radius: 12px; color: var(--text-main); font-size: 0.95rem; outline: none; margin-bottom: 12px; }
-        .feedback-form input:focus, .feedback-form textarea:focus { border-color: var(--gold); }
-        .feedback-form textarea { resize: none; height: 90px; }
-        .submit-fb-btn { background: var(--gold); color: #000; border: none; width: 100%; padding: 12px; border-radius: 12px; font-weight: bold; font-size: 1rem; cursor: pointer; }
 
         .footer { max-width: 800px; margin: 40px auto 20px auto; padding: 25px 20px; text-align: center; border-top: 1px solid var(--border-color); }
         .social-icons { display: flex; justify-content: center; gap: 22px; margin-bottom: 18px; font-size: 1.6rem; }
@@ -131,7 +117,7 @@
 </head>
 <body data-theme="light">
 
-    <!-- Luxury Splash Animation Screen with Multilingual Welcome -->
+    <!-- Luxury Splash Animation Screen -->
     <div id="splashScreen">
         <div class="splash-logo-box">
             <i class="fas fa-utensils"></i>
@@ -189,41 +175,23 @@
             </div>
         </div>
 
-        <!-- Customer Feedback & Rating Section -->
-        <div class="section-box">
-            <div class="feedback-section">
-                <h3 id="fbTitle"><i class="fas fa-star"></i> Rate Our Service & Feedback</h3>
-                <div class="rating-options" id="ratingOptions">
-                    <div class="rating-btn active" id="rate1" onclick="selectRating(this, 'Very Satisfied')">⭐ Very Satisfied</div>
-                    <div class="rating-btn" id="rate2" onclick="selectRating(this, 'Medium')">🌟 Medium</div>
-                    <div class="rating-btn" id="rate3" onclick="selectRating(this, 'Not Satisfied')">⚠️ Not Satisfied</div>
-                </div>
-                <form class="feedback-form" onsubmit="submitFeedback(event)">
-                    <input type="text" id="fbName" placeholder="Your Name" required>
-                    <input type="text" id="fbContact" placeholder="Phone or Email" required>
-                    <textarea id="fbMessage" placeholder="Your feedback or comment..." required></textarea>
-                    <button type="submit" class="submit-fb-btn" id="submitFbBtn">Submit Feedback</button>
-                </form>
-            </div>
-        </div>
-
-        <!-- Modal -->
-        <div class="modal" id="foodModal" onclick="closeModal(event)">
-            <div class="modal-content" onclick="event.stopPropagation()">
-                <img id="modalImg" class="modal-img" src="" alt="">
-                <h2 id="modalTitle" style="margin-bottom: 10px; color: var(--gold);"></h2>
-                <p id="modalDesc" style="color: var(--text-muted); margin-bottom: 15px; line-height: 1.5;"></p>
-                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 15px;">
-                    <span id="modalPrice" class="price" style="font-size: 1.3rem;"></span>
-                    <button id="closeModalBtn" onclick="closeModalDirect()" style="background: var(--gold); color: #000; border: none; padding: 10px 20px; border-radius: 12px; font-weight: bold; cursor: pointer;">Close</button>
-                </div>
-            </div>
-        </div>
-
         <div class="footer">
             <div class="social-icons" id="socialIcons"></div>
             <div class="dev-credit">
-                Powered & Developed by Expert Developer
+                Powered & Developed by <a id="devLink" href="#" target="_blank">Expert Developer</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="foodModal" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <img id="modalImg" class="modal-img" src="" alt="">
+            <h2 id="modalTitle" style="margin-bottom: 10px; color: var(--gold);"></h2>
+            <p id="modalDesc" style="color: var(--text-muted); margin-bottom: 15px; line-height: 1.5;"></p>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 15px;">
+                <span id="modalPrice" class="price" style="font-size: 1.3rem;"></span>
+                <button id="closeModalBtn" onclick="closeModalDirect()" style="background: var(--gold); color: #000; border: none; padding: 10px 20px; border-radius: 12px; font-weight: bold; cursor: pointer;">Close</button>
             </div>
         </div>
     </div>
@@ -232,48 +200,17 @@
         let allMenuData = [];
         let currentLang = 'en';
         let currentCategory = 'All';
-        let selectedRatingText = 'Very Satisfied';
         let currentSlide = 0;
         let sliderInterval;
         let isListView = false;
 
         const dictionary = {
-            en: { 
-                all: "All", pay: "Payment Options", search: "Search food or drink...", close: "Close", details: "Details", noFood: "No food items found", specialTitle: "Today's Special Recommendation",
-                fbTitle: "Rate Our Service & Feedback", namePh: "Your Name", contactPh: "Phone or Email", msgPh: "Your feedback or comment...", subBtn: "Submit Feedback",
-                successMsg: "Thank you! Your feedback has been sent successfully.",
-                r1: "⭐ Very Satisfied", r2: "🌟 Medium", r3: "⚠️ Not Satisfied"
-            },
-            am: { 
-                all: "ሁሉም", pay: "የክፍያ አማራጮች", search: "ምግብ ወይም መጠጥ ይፈልጉ...", close: "ዝጋ", details: "ዝርዝር", noFood: "ምንም ምግብ አልተገኘም", specialTitle: "የዛሬ ልዩ የምግብ ጥቆማ",
-                fbTitle: "አገልግሎታችንን ይገመግሙና አስተያየት ይስጡ", namePh: "ስምዎ", contactPh: "ስልክ ቁጥር ወይም ኢሜል", msgPh: "አስተያየትዎን እዚህ ይጻፉ...", subBtn: "አስተያየት ላክ",
-                successMsg: "እናመሰግናለን! አስተያየትዎ በስኬት ተልኳል።",
-                r1: "⭐ በጣም ረክቻለሁ", r2: "🌟 መካከለኛ", r3: "⚠️ አልረካሁም"
-            },
-            ar: { 
-                all: "الكل", pay: "خيارات الدفع", search: "ابحث عن طعام أو شراب...", close: "إغلاق", details: "تفاصيل", noFood: "لم يتم العثور على طعام", specialTitle: "عرض اليوم المميز",
-                fbTitle: "قيم خدمتنا واترك ملاحظاتك", namePh: "اسمك", contactPh: "رقم الهاتف أو البريد", msgPh: "اكتب ملاحظاتك هنا...", subBtn: "إرسال التعليق",
-                successMsg: "شكرا لك! تم إرسال ملاحظاتك بنجاح.",
-                r1: "⭐ راض جدا", r2: "🌟 متوسط", r3: "⚠️ غير راض"
-            },
-            fr: { 
-                all: "Tout", pay: "Options de Paiement", search: "Rechercher...", close: "Fermer", details: "Détails", noFood: "Aucun plat trouvé", specialTitle: "Spécial du Jour",
-                fbTitle: "Évaluez notre service et avis", namePh: "Votre Nom", contactPh: "Téléphone ou Email", msgPh: "Votre commentaire...", subBtn: "Soumettre",
-                successMsg: "Merci ! Votre avis a été envoyé.",
-                r1: "⭐ Très satisfait", r2: "🌟 Moyen", r3: "⚠️ Pas satisfait"
-            },
-            tr: { 
-                all: "Tümü", pay: "Ödeme Seçenekleri", search: "Yemek veya içecek ara...", close: "Kapat", details: "Detay", noFood: "Yemek bulunamadı", specialTitle: "Günün Özel Önerisi",
-                fbTitle: "Hizmetimizi Değerlendirin", namePh: "Adınız", contactPh: "Telefon veya E-posta", msgPh: "Görüşleriniz...", subBtn: "Gönder",
-                successMsg: "Teşekkürler! Geri bildiriminiz gönderildi.",
-                r1: "⭐ Çok memnun", r2: "🌟 Orta", r3: "⚠️ Memnun değil"
-            },
-            zh: { 
-                all: "全部", pay: "付款方式", search: "搜索食物或饮料...", close: "关闭", details: "详情", noFood: "未找到食物", specialTitle: "今日特色推荐",
-                fbTitle: "评价我们的服务与反馈", namePh: "您的姓名", contactPh: "电话或邮箱", msgPh: "请输入您的意见...", subBtn: "提交反馈",
-                successMsg: "谢谢！您的反馈已成功发送。",
-                r1: "⭐ 非常满意", r2: "🌟 一般", r3: "⚠️ 不满意"
-            }
+            en: { all: "All", pay: "Payment Options", search: "Search food or drink...", close: "Close", details: "Details", noFood: "No food items found", specialTitle: "Today's Special Recommendation" },
+            am: { all: "ሁሉም", pay: "የክፍያ አማራጮች", search: "ምግብ ወይም መጠጥ ይፈልጉ...", close: "ዝጋ", details: "ዝርዝር", noFood: "ምንም ምግብ አልተገኘም", specialTitle: "የዛሬ ልዩ የምግብ ጥቆማ" },
+            ar: { all: "الكل", pay: "خيارات الدفع", search: "ابحث عن طعام أو شراب...", close: "إغلاق", details: "تفاصيل", noFood: "لم يتم العثور على طعام", specialTitle: "عرض اليوم المميز" },
+            fr: { all: "Tout", pay: "Options de Paiement", search: "Rechercher...", close: "Fermer", details: "Détails", noFood: "Aucun plat trouvé", specialTitle: "Spécial du Jour" },
+            tr: { all: "Tümü", pay: "Ödeme Seçenekleri", search: "Yemek veya içecek ara...", close: "Kapat", details: "Detay", noFood: "Yemek bulunamadı", specialTitle: "Günün Özel Önerisi" },
+            zh: { all: "全部", pay: "付款方式", search: "搜索食物或饮料...", close: "关闭", details: "详情", noFood: "未找到食物", specialTitle: "今日特色推荐" }
         };
 
         window.addEventListener('load', () => {
@@ -329,12 +266,15 @@
                 document.getElementById('logoContainer').innerHTML = `<img src="${settings.logo_url}" alt="Logo" class="header-logo">`;
             }
 
+            const devLink = document.getElementById('devLink');
+            devLink.href = settings.developer_link || '#';
+
             let socialHTML = '';
-            if(settings.social_facebook) socialHTML += `<a href="${settings.social_facebook}" target="_blank"><i class="fab fa-facebook"></i></a>`;
-            if(settings.social_tiktok) socialHTML += `<a href="${settings.social_tiktok}" target="_blank"><i class="fab fa-tiktok"></i></a>`;
-            if(settings.social_instagram) socialHTML += `<a href="${settings.social_instagram}" target="_blank"><i class="fab fa-instagram"></i></a>`;
-            if(settings.social_whatsapp) socialHTML += `<a href="${settings.social_whatsapp}" target="_blank"><i class="fab fa-whatsapp"></i></a>`;
-            if(settings.social_email) socialHTML += `<a href="mailto:${settings.social_email}"><i class="fas fa-envelope"></i></a>`;
+            if(settings.social_tiktok) socialHTML += `<a href="${settings.social_tiktok}" target="_blank" title="TikTok"><i class="fab fa-tiktok"></i></a>`;
+            if(settings.social_instagram) socialHTML += `<a href="${settings.social_instagram}" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>`;
+            if(settings.social_whatsapp) socialHTML += `<a href="${settings.social_whatsapp}" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>`;
+            if(settings.social_facebook) socialHTML += `<a href="${settings.social_facebook}" target="_blank" title="Facebook"><i class="fab fa-facebook"></i></a>`;
+            if(settings.social_email) socialHTML += `<a href="mailto:${settings.social_email}" title="Email"><i class="fas fa-envelope"></i></a>`;
             document.getElementById('socialIcons').innerHTML = socialHTML;
 
             const payContainer = document.getElementById('paymentContainer');
@@ -367,15 +307,6 @@
             document.getElementById('searchInput').placeholder = dict.search;
             document.getElementById('payTitle').innerHTML = `<i class="fas fa-wallet"></i> ${dict.pay}`;
             document.getElementById('closeModalBtn').innerText = dict.close;
-            document.getElementById('fbTitle').innerHTML = `<i class="fas fa-star"></i> ${dict.fbTitle}`;
-            document.getElementById('fbName').placeholder = dict.namePh;
-            document.getElementById('fbContact').placeholder = dict.contactPh;
-            document.getElementById('fbMessage').placeholder = dict.msgPh;
-            document.getElementById('submitFbBtn').innerText = dict.subBtn;
-
-            document.getElementById('rate1').innerText = dict.r1;
-            document.getElementById('rate2').innerText = dict.r2;
-            document.getElementById('rate3').innerText = dict.r3;
 
             renderFeaturedSlider();
             buildCategories();
@@ -383,7 +314,7 @@
         }
 
         function renderFeaturedSlider() {
-            const featuredItems = allMenuData.filter(item => item.is_featured === 1 && item.is_available === 1);
+            const featuredItems = allMenuData.filter(item => item.is_featured === 1);
             const track = document.getElementById('sliderTrack');
             track.innerHTML = '';
 
@@ -455,18 +386,11 @@
             }
 
             data.forEach(item => {
-                const isAvail = item.is_available === 1;
                 container.innerHTML += `
                     <div class="card" onclick='openModal(${JSON.stringify(item)})'>
                         <div class="card-img-box">
                             <img src="${item.image_url || 'https://via.placeholder.com/300'}" alt="${item.title}">
-                            ${item.is_featured && isAvail ? '<span class="badge">Special</span>' : ''}
-                            ${!isAvail ? `
-                                <div class="out-of-stock-overlay">
-                                    <span class="out-of-stock-badge">ለጊዜው አልቋል (Out of Stock)</span>
-                                    <span class="out-of-stock-reason">${item.unavailable_reason || 'በቅርቡ ይመለሳል'}</span>
-                                </div>
-                            ` : ''}
+                            ${item.is_featured ? '<span class="badge">Special</span>' : ''}
                         </div>
                         <div class="card-content">
                             <div>
@@ -481,37 +405,6 @@
                     </div>
                 `;
             });
-        }
-
-        function selectRating(btn, ratingText) {
-            document.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            selectedRatingText = ratingText;
-        }
-
-        async function submitFeedback(e) {
-            e.preventDefault();
-            const data = {
-                name: document.getElementById('fbName').value,
-                contact: document.getElementById('fbContact').value,
-                rating: selectedRatingText,
-                message: document.getElementById('fbMessage').value
-            };
-
-            const res = await fetch('/api/feedback', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-
-            if(res.ok) {
-                alert(dictionary[currentLang].successMsg);
-                document.getElementById('fbName').value = '';
-                document.getElementById('fbContact').value = '';
-                document.getElementById('fbMessage').value = '';
-            } else {
-                alert('Error submitting feedback.');
-            }
         }
 
         function openModal(item) {
