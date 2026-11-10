@@ -1,218 +1,453 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Luxury Admin Dashboard - Hijra Restaurant</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Hijra Restaurant - Luxury Digital Menu</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --gold: #d4af37; --dark: #121212; --card-bg: #1e1e1e; --text-light: #f8f9fa; --text-muted: #adb5bd; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
-        body { background-color: var(--dark); color: var(--text-light); padding: 20px; }
-        .container { max-width: 1000px; margin: 0 auto; }
-        .admin-header { background: linear-gradient(135deg, #000, #1a1a1a); padding: 25px; border-radius: 16px; border: 2px solid var(--gold); text-align: center; margin-bottom: 25px; box-shadow: 0 10px 30px rgba(212,175,55,0.15); }
-        .admin-header h1 { color: var(--gold); font-size: 2rem; margin-bottom: 5px; }
-        .section { background: var(--card-bg); border: 1px solid #333; padding: 20px; border-radius: 16px; margin-bottom: 25px; }
-        .section h2 { color: var(--gold); font-size: 1.3rem; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 8px; display: flex; align-items: center; gap: 10px; }
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 15px; }
-        input, select, textarea { width: 100%; padding: 12px; background: #121212; border: 1px solid #444; color: #fff; border-radius: 10px; outline: none; font-size: 0.95rem; }
-        input:focus, select:focus, textarea:focus { border-color: var(--gold); }
-        textarea { resize: vertical; height: 80px; }
-        .btn { background: var(--gold); color: #000; border: none; padding: 12px 25px; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        .btn:hover { opacity: 0.9; transform: translateY(-2px); }
-        .btn-danger { background: #e74c3c; color: #fff; padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; border: none; cursor: pointer; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #333; }
-        th { color: var(--gold); background: #181818; }
-        .badge-special { background: var(--gold); color: #000; padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: bold; }
-        .feedback-card { background: #181818; border: 1px solid #333; padding: 15px; border-radius: 10px; margin-bottom: 10px; }
-        .feedback-header { display: flex; justify-content: space-between; margin-bottom: 6px; font-weight: bold; color: var(--gold); }
+        body { background-color: var(--dark); color: var(--text-light); padding-bottom: 60px; -webkit-tap-highlight-color: transparent; }
+
+        /* Splash Animation Screen */
+        #splashScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.6s ease; }
+        .splash-logo-box { position: relative; width: 120px; height: 120px; display: flex; justify-content: center; align-items: center; animation: pulseGlow 2s infinite; }
+        .splash-logo-box i.fa-utensils { font-size: 3.5rem; color: var(--gold); position: absolute; animation: crossCut 1.5s ease infinite alternate; }
+        .splash-logo-box i.fa-hat-chef { font-size: 4rem; color: #fff; z-index: 2; position: absolute; }
+        .splash-title { margin-top: 25px; font-size: 1.8rem; font-weight: 800; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; animation: fadeInText 1s ease; }
+        @keyframes crossCut { 0% { transform: rotate(0deg) scale(1); } 100% { transform: rotate(15deg) scale(1.1); } }
+        @keyframes pulseGlow { 0% { filter: drop-shadow(0 0 10px rgba(212,175,55,0.3)); } 50% { filter: drop-shadow(0 0 25px rgba(212,175,55,0.7)); } 100% { filter: drop-shadow(0 0 10px rgba(212,175,55,0.3)); } }
+        @keyframes fadeInText { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .app-container { width: 100%; max-width: 480px; margin: 0 auto; min-height: 100vh; background: var(--dark); box-shadow: 0 0 40px rgba(0,0,0,0.9); position: relative; }
+        @media (min-width: 768px) { .app-container { max-width: 850px; } }
+
+        .header { background: linear-gradient(135deg, #000000, #1a1a1a); color: white; padding: 35px 20px; text-align: center; border-bottom: 2px solid var(--gold); box-shadow: 0 10px 30px rgba(212,175,55,0.15); }
+        .header h1 { font-size: 2rem; margin-bottom: 6px; font-weight: 800; color: var(--gold); letter-spacing: 1px; }
+        @media (min-width: 768px) { .header h1 { font-size: 2.5rem; } }
+        .header p { font-size: 0.95rem; opacity: 0.85; max-width: 600px; margin: 0 auto 12px auto; line-height: 1.4; color: #ddd; }
+        .info-badges { display: flex; justify-content: center; gap: 12px; font-size: 0.85rem; color: var(--gold); flex-wrap: wrap; }
+        .info-badges span { background: rgba(212,175,55,0.1); padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(212,175,55,0.3); }
+
+        .controls-container { max-width: 100%; margin: -22px auto 22px auto; padding: 0 15px; z-index: 10; position: relative; }
+        .search-lang-box { background: var(--card-bg); padding: 10px 18px; border-radius: 50px; box-shadow: 0 8px 25px rgba(0,0,0,0.5); display: flex; align-items: center; gap: 12px; border: 1px solid rgba(212,175,55,0.3); }
+        .search-lang-box input { flex: 1; border: none; outline: none; font-size: 1rem; color: var(--text-light); background: transparent; min-width: 0; }
+        .search-lang-box select { border: 1px solid rgba(212,175,55,0.4); padding: 6px 14px; border-radius: 20px; background: #2a2a2a; color: var(--gold); font-weight: 600; cursor: pointer; outline: none; font-size: 0.9rem; }
+
+        /* Slider Banner */
+        .featured-slider-container { padding: 0 15px; margin-bottom: 22px; position: relative; overflow: hidden; }
+        .slider-track { display: flex; transition: transform 0.5s ease; }
+        .featured-card { min-width: 100%; background: linear-gradient(135deg, #2a2410, #1e1e1e); border: 1px solid var(--gold); border-radius: 16px; padding: 18px; display: flex; gap: 18px; align-items: center; box-shadow: 0 8px 20px rgba(212,175,55,0.15); flex-shrink: 0; }
+        .featured-card img { width: 110px; height: 110px; object-fit: cover; border-radius: 12px; border: 1px solid var(--gold); flex-shrink: 0; }
+        .featured-info h3 { color: var(--gold); font-size: 1.15rem; margin-bottom: 4px; }
+        .featured-info p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px; display: -webkit-box; line-clamp: 2; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .featured-price { color: #fff; font-weight: bold; font-size: 1.1rem; }
+
+        .categories-wrapper { padding: 0 15px; margin-bottom: 22px; overflow-x: auto; display: flex; gap: 10px; scrollbar-width: none; }
+        .categories-wrapper::-webkit-scrollbar { display: none; }
+        .cat-btn { background: var(--card-bg); border: 1px solid #333; color: var(--text-muted); padding: 9px 18px; border-radius: 20px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: all 0.2s ease; font-size: 0.9rem; }
+        .cat-btn.active, .cat-btn:hover { background: var(--gold); color: #000; border-color: var(--gold); font-weight: 700; box-shadow: 0 4px 15px rgba(212,175,55,0.3); }
+
+        .menu-container { padding: 0 15px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        @media (min-width: 768px) { .menu-container { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; padding: 0 20px; } }
+        .card { background: var(--card-bg); border-radius: 16px; overflow: hidden; border: 1px solid #2a2a2a; transition: transform 0.2s ease, border-color 0.2s; cursor: pointer; display: flex; flex-direction: column; }
+        .card:hover { transform: translateY(-4px); border-color: var(--gold); }
+        .card-img-box { width: 100%; height: 140px; overflow: hidden; position: relative; background: #000; }
+        @media (min-width: 768px) { .card-img-box { height: 170px; } }
+        .card-img-box img { width: 100%; height: 100%; object-fit: cover; }
+        .badge { position: absolute; top: 10px; right: 10px; background: var(--gold); color: #000; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: bold; }
+        
+        .card-content { padding: 14px; display: flex; flex-direction: column; flex: 1; justify-content: space-between; }
+        .card-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; color: #fff; }
+        .card-desc { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px; display: -webkit-box; line-clamp: 2; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .card-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #2a2a2a; padding-top: 10px; }
+        .price { font-size: 1.15rem; font-weight: 800; color: var(--gold); }
+        .view-btn { background: rgba(212,175,55,0.15); color: var(--gold); border: 1px solid rgba(212,175,55,0.3); padding: 6px 12px; border-radius: 10px; font-size: 0.8rem; font-weight: 600; }
+
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 100; justify-content: center; align-items: flex-end; backdrop-filter: blur(5px); }
+        .modal.active { display: flex; }
+        .modal-content { background: var(--card-bg); border: 1px solid var(--gold); width: 100%; max-width: 600px; border-top-left-radius: 25px; border-top-right-radius: 25px; max-height: 85vh; overflow-y: auto; padding: 25px; animation: slideUp 0.3s ease; }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        .modal-img { width: 100%; height: 230px; object-fit: cover; border-radius: 16px; margin-bottom: 15px; border: 1px solid var(--gold); }
+
+        .section-box { padding: 0 15px; margin: 30px 0; }
+        .payment-section, .feedback-section { background: var(--card-bg); border: 1px solid #2a2a2a; padding: 22px; border-radius: 16px; box-shadow: 0 5px 20px rgba(0,0,0,0.4); }
+        .section-box h3 { font-size: 1.15rem; margin-bottom: 15px; color: var(--gold); display: flex; align-items: center; gap: 10px; }
+        .payment-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+        @media (min-width: 768px) { .payment-grid { grid-template-columns: repeat(2, 1fr); } }
+        .payment-card { background: #181818; border: 1px solid #333; padding: 15px; border-radius: 12px; font-size: 0.9rem; }
+        .payment-card strong { color: var(--gold); font-size: 1rem; }
+
+        /* Feedback & Rating */
+        .rating-options { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
+        .rating-btn { flex: 1; min-width: 120px; background: #181818; border: 1px solid #444; color: #fff; padding: 10px; border-radius: 10px; cursor: pointer; text-align: center; font-size: 0.85rem; font-weight: 600; transition: 0.2s; }
+        .rating-btn.active, .rating-btn:hover { border-color: var(--gold); background: rgba(212,175,55,0.15); color: var(--gold); }
+        .feedback-form input, .feedback-form textarea { width: 100%; background: #181818; border: 1px solid #333; padding: 12px 15px; border-radius: 12px; color: #fff; font-size: 0.95rem; outline: none; margin-bottom: 12px; }
+        .feedback-form input:focus, .feedback-form textarea:focus { border-color: var(--gold); }
+        .feedback-form textarea { resize: none; height: 90px; }
+        .submit-fb-btn { background: var(--gold); color: #000; border: none; width: 100%; padding: 12px; border-radius: 12px; font-weight: bold; font-size: 1rem; cursor: pointer; }
+
+        .footer { max-width: 800px; margin: 40px auto 20px auto; padding: 25px 20px; text-align: center; border-top: 1px solid #2a2a2a; }
+        .social-icons { display: flex; justify-content: center; gap: 22px; margin-bottom: 18px; font-size: 1.6rem; }
+        .social-icons a { color: var(--text-muted); transition: color 0.2s; }
+        .social-icons a:hover { color: var(--gold); }
+        .dev-credit { font-size: 0.9rem; color: var(--text-muted); }
+        .dev-credit a { color: var(--gold); text-decoration: none; font-weight: 600; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="admin-header">
-            <h1><i class="fas fa-crown"></i> Hijra Restaurant Admin Dashboard</h1>
-            <p>Manage your menu items, payments, and customer feedbacks easily.</p>
-        </div>
 
-        <!-- Add Menu Item -->
-        <div class="section">
-            <h2><i class="fas fa-utensils"></i> Add Menu Item / Food / Drink</h2>
-            <form id="menuForm" onsubmit="addMenu(event)">
-                <div class="form-grid">
-                    <input type="text" id="title" placeholder="Food/Drink Name (e.g. Mandi)" required>
-                    <input type="text" id="category" placeholder="Category (e.g. Lunch, Drinks)" required>
-                    <input type="number" step="0.01" id="price" placeholder="Price (Birr)" required>
-                    <select id="is_featured">
-                        <option value="0">Normal Item</option>
-                        <option value="1">⭐ Today's Special (Featured Slider)</option>
-                    </select>
-                </div>
-                <textarea id="description" placeholder="Description..."></textarea>
-                <div style="margin: 15px 0;">
-                    <label style="display: block; margin-bottom: 5px; color: var(--text-muted);">Food/Drink Image:</label>
-                    <input type="file" id="imageFile" accept="image/*" required>
-                </div>
-                <button type="submit" class="btn"><i class="fas fa-plus"></i> Add Item</button>
-            </form>
+    <!-- Splash Screen Animation -->
+    <div id="splashScreen">
+        <div class="splash-logo-box">
+            <i class="fas fa-utensils"></i>
+            <i class="fas fa-hat-chef"></i>
         </div>
+        <div class="splash-title">Hijra Restaurant</div>
+    </div>
 
-        <!-- Manage Menu Items -->
-        <div class="section">
-            <h2><i class="fas fa-list"></i> Existing Menu Items</h2>
-            <div style="overflow-x: auto;">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Image</th>
-                            <th>Name</th>
-                            <th>Category</th>
-                            <th>Price</th>
-                            <th>Special</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="menuTableBody"></tbody>
-                </table>
+    <div class="app-container">
+        <div class="header">
+            <h1 id="restName">Hijra Restaurant</h1>
+            <p id="subTitle">Welcome! Choose from our delicious luxury menu</p>
+            <div class="info-badges">
+                <span id="hoursBadge"><i class="fas fa-clock"></i> 08:00 AM - 10:00 PM</span>
+                <span id="addressBadge"><i class="fas fa-map-marker-alt"></i> Addis Ababa</span>
             </div>
         </div>
 
-        <!-- Payment Options -->
-        <div class="section">
-            <h2><i class="fas fa-wallet"></i> Manage Payment Options (CBE, Telebirr, etc.)</h2>
-            <form id="paymentForm" onsubmit="addPayment(event)">
-                <div class="form-grid">
-                    <input type="text" id="bankName" placeholder="Bank Name (e.g. CBE / Telebirr)" required>
-                    <input type="text" id="accountNumber" placeholder="Account Number" required>
-                    <input type="text" id="accountHolder" placeholder="Account Holder Name (Name)" required>
-                </div>
-                <button type="submit" class="btn"><i class="fas fa-plus"></i> Add Payment Account</button>
-            </form>
-            <div style="margin-top: 15px;" id="paymentList"></div>
+        <div class="controls-container">
+            <div class="search-lang-box">
+                <i class="fas fa-search" style="color: var(--gold);"></i>
+                <input type="text" id="searchInput" placeholder="Search food or drink..." oninput="filterMenu()">
+                <select id="langSelect" onchange="changeLanguage()">
+                    <option value="en" selected>English</option>
+                    <option value="am">አማርኛ</option>
+                    <option value="ar">العربية</option>
+                    <option value="fr">Français</option>
+                    <option value="tr">Türkçe</option>
+                    <option value="zh">中文</option>
+                </select>
+            </div>
         </div>
 
-        <!-- Customer Feedbacks & Ratings -->
-        <div class="section">
-            <h2><i class="fas fa-comments"></i> Customer Feedbacks & Ratings</h2>
-            <div id="feedbackContainer">
-                <p style="color: var(--text-muted);">Loading feedbacks...</p>
+        <!-- Featured Slider Banner -->
+        <div class="featured-slider-container" id="sliderWrapper">
+            <div class="slider-track" id="sliderTrack"></div>
+        </div>
+
+        <div class="categories-wrapper" id="categoryContainer"></div>
+        <div class="menu-container" id="menuContainer"></div>
+
+        <!-- Payment Options Section -->
+        <div class="section-box">
+            <div class="payment-section">
+                <h3 id="payTitle"><i class="fas fa-wallet"></i> Payment Options</h3>
+                <div class="payment-grid" id="paymentContainer"></div>
+            </div>
+        </div>
+
+        <!-- Customer Feedback & Rating Section -->
+        <div class="section-box">
+            <div class="feedback-section">
+                <h3 id="fbTitle"><i class="fas fa-star"></i> Rate Our Service & Feedback</h3>
+                <div class="rating-options" id="ratingOptions">
+                    <div class="rating-btn active" onclick="selectRating(this, 'Very Satisfied (በጣም ረክቻለሁ)')">⭐ Very Satisfied</div>
+                    <div class="rating-btn" onclick="selectRating(this, 'Medium (መካከለኛ ረክቻለሁ)')">🌟 Medium</div>
+                    <div class="rating-btn" onclick="selectRating(this, 'Not Satisfied (አልረካሁም / አሪፍ አይደለም)')">⚠️ Not Satisfied</div>
+                </div>
+                <form class="feedback-form" onsubmit="submitFeedback(event)">
+                    <input type="text" id="fbName" placeholder="Your Name (ስምዎ)" required>
+                    <input type="text" id="fbContact" placeholder="Phone or Email (ስልክ ቁጥር ወይም ኢሜል)" required>
+                    <textarea id="fbMessage" placeholder="Your feedback or comment... (አስተያየትዎን እዚህ ይጻፉ...)" required></textarea>
+                    <button type="submit" class="submit-fb-btn" id="submitFbBtn">Submit Feedback</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal" id="foodModal" onclick="closeModal(event)">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <img id="modalImg" class="modal-img" src="" alt="">
+                <h2 id="modalTitle" style="margin-bottom: 10px; color: var(--gold);"></h2>
+                <p id="modalDesc" style="color: var(--text-muted); margin-bottom: 15px; line-height: 1.5;"></p>
+                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #333; padding-top: 15px;">
+                    <span id="modalPrice" class="price" style="font-size: 1.3rem;"></span>
+                    <button id="closeModalBtn" onclick="closeModalDirect()" style="background: var(--gold); color: #000; border: none; padding: 10px 20px; border-radius: 12px; font-weight: bold; cursor: pointer;">Close</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="social-icons" id="socialIcons"></div>
+            <div class="dev-credit">
+                Powered & Developed by <a id="devLink" href="#" target="_blank">Expert Developer</a>
             </div>
         </div>
     </div>
 
     <script>
-        async function loadAdminData() {
-            // Menu
-            const resMenu = await fetch('/api/menu');
-            const menu = await resMenu.json();
-            const tbody = document.getElementById('menuTableBody');
-            tbody.innerHTML = '';
-            menu.forEach(item => {
-                tbody.innerHTML += `
-                    <tr>
-                        <td><img src="${item.image_url || 'https://via.placeholder.com/50'}" style="width:40px; height:40px; object-fit:cover; border-radius:6px;"></td>
-                        <td><strong>${item.title}</strong></td>
-                        <td>${item.category}</td>
-                        <td>${item.price} Birr</td>
-                        <td>${item.is_featured ? '<span class="badge-special">Special</span>' : '-'}</td>
-                        <td><button class="btn-danger" onclick="deleteMenu(${item.id})"><i class="fas fa-trash"></i></button></td>
-                    </tr>
-                `;
-            });
+        let allMenuData = [];
+        let currentLang = 'en';
+        let currentCategory = 'All';
+        let selectedRatingText = 'Very Satisfied (በጣም ረክቻለሁ)';
+        let currentSlide = 0;
+        let sliderInterval;
+
+        const dictionary = {
+            en: { 
+                all: "All", pay: "Payment Options", search: "Search food or drink...", close: "Close", details: "Details", noFood: "No food items found", specialTitle: "Today's Special Recommendation",
+                fbTitle: "Rate Our Service & Feedback", namePh: "Your Name", contactPh: "Phone or Email", msgPh: "Your feedback or comment...", subBtn: "Submit Feedback",
+                successMsg: "Thank you! Your feedback has been sent successfully."
+            },
+            am: { 
+                all: "ሁሉም", pay: "የክፍያ አማራጮች", search: "ምግብ ወይም መጠጥ ይፈልጉ...", close: "ዝጋ", details: "ዝርዝር", noFood: "ምንም ምግብ አልተገኘም", specialTitle: "የዛሬ ልዩ የምግብ ጥቆማ",
+                fbTitle: "አገልግሎታችንን ይገመግሙና አስተያየት ይስጡ", namePh: "ስምዎ", contactPh: "ስልክ ቁጥር ወይም ኢሜል", msgPh: "አስተያየትዎን እዚህ ይጻፉ...", subBtn: "አስተያየት ላክ",
+                successMsg: "እናመሰግናለን! አስተያየትዎ በስኬት ተልኳል።"
+            },
+            ar: { 
+                all: "الكل", pay: "خيارات الدفع", search: "ابحث عن طعام أو شراب...", close: "إغلاق", details: "تفاصيل", noFood: "لم يتم العثور على طعام", specialTitle: "عرض اليوم المميز",
+                fbTitle: "قيم خدمتنا واترك ملاحظاتك", namePh: "اسمك", contactPh: "رقم الهاتق أو البريد", msgPh: "اكتب ملاحظاتك هنا...", subBtn: "إرسال التعليق",
+                successMsg: "شكرا لك! تم إرسال ملاحظاتك بنجاح."
+            },
+            fr: { 
+                all: "Tout", pay: "Options de Paiement", search: "Rechercher...", close: "Fermer", details: "Détails", noFood: "Aucun plat trouvé", specialTitle: "Spécial du Jour",
+                fbTitle: "Évaluez notre service et avis", namePh: "Votre Nom", contactPh: "Téléphone ou Email", msgPh: "Votre commentaire...", subBtn: "Soumettre",
+                successMsg: "Merci ! Votre avis a été envoyé."
+            },
+            tr: { 
+                all: "Tümü", pay: "Ödeme Seçenekleri", search: "Yemek veya içecek ara...", close: "Kapat", details: "Detay", noFood: "Yemek bulunamadı", specialTitle: "Günün Özel Önerisi",
+                fbTitle: "Hizmetimizi Değerlendirin", namePh: "Adınız", contactPh: "Telefon veya E-posta", msgPh: "Görüşleriniz...", subBtn: "Gönder",
+                successMsg: "Teşekkürler! Geri bildiriminiz gönderildi."
+            },
+            zh: { 
+                all: "全部", pay: "付款方式", search: "搜索食物或饮料...", close: "关闭", details: "详情", noFood: "未找到食物", specialTitle: "今日特色推荐",
+                fbTitle: "评价我们的服务与反馈", namePh: "您的姓名", contactPh: "电话或邮箱", msgPh: "请输入您的意见...", subBtn: "提交反馈",
+                successMsg: "谢谢！您的反馈已成功发送。"
+            }
+        };
+
+        // Hide Splash Screen after 2.2 seconds
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const splash = document.getElementById('splashScreen');
+                splash.style.opacity = '0';
+                setTimeout(() => splash.style.display = 'none', 600);
+            }, 2200);
+            loadData();
+        });
+
+        async function loadData() {
+            const [menuRes, settingsRes, paymentRes] = await Promise.all([
+                fetch('/api/menu'),
+                fetch('/api/settings'),
+                fetch('/api/payments')
+            ]);
+            allMenuData = await menuRes.json();
+            const settings = await settingsRes.json();
+            const payments = await paymentRes.json();
+
+            document.getElementById('restName').innerText = settings.restaurant_name || 'Hijra Restaurant';
+            document.getElementById('subTitle').innerText = settings.subtitle || 'Welcome! Choose from our delicious luxury menu';
+            document.getElementById('hoursBadge').innerHTML = `<i class="fas fa-clock"></i> ${settings.working_hours || '08:00 AM - 10:00 PM'}`;
+            document.getElementById('addressBadge').innerHTML = `<i class="fas fa-map-marker-alt"></i> ${settings.address || 'Addis Ababa'}`;
+            
+            document.getElementById('devLink').href = settings.developer_link || '#';
+            document.getElementById('devLink').innerText = "Expert Developer / ባለቤት";
+
+            // Social Icons
+            let socialHTML = '';
+            if(settings.social_facebook) socialHTML += `<a href="${settings.social_facebook}" target="_blank"><i class="fab fa-facebook"></i></a>`;
+            if(settings.social_tiktok) socialHTML += `<a href="${settings.social_tiktok}" target="_blank"><i class="fab fa-tiktok"></i></a>`;
+            if(settings.social_instagram) socialHTML += `<a href="${settings.social_instagram}" target="_blank"><i class="fab fa-instagram"></i></a>`;
+            if(settings.social_whatsapp) socialHTML += `<a href="${settings.social_whatsapp}" target="_blank"><i class="fab fa-whatsapp"></i></a>`;
+            if(settings.social_email) socialHTML += `<a href="mailto:${settings.social_email}"><i class="fas fa-envelope"></i></a>`;
+            document.getElementById('socialIcons').innerHTML = socialHTML;
 
             // Payments
-            const resPay = await fetch('/api/payments');
-            const payments = await resPay.json();
-            const payList = document.getElementById('paymentList');
-            payList.innerHTML = '';
-            payments.forEach(p => {
-                payList.innerHTML += `
-                    <div style="display: flex; justify-content: space-between; align-items: center; background: #121212; padding: 10px; border-radius: 8px; margin-bottom: 8px; border: 1px solid #333;">
-                        <div><strong>${p.bank_name}</strong> - Account: ${p.account_number} - <em>Name: ${p.account_holder || ''}</em></div>
-                        <button class="btn-danger" onclick="deletePayment(${p.id})">Delete</button>
-                    </div>
-                `;
-            });
-
-            // Feedbacks
-            const resFb = await fetch('/api/feedback');
-            const feedbacks = await resFb.json();
-            const fbContainer = document.getElementById('feedbackContainer');
-            fbContainer.innerHTML = '';
-            if(feedbacks.length === 0) {
-                fbContainer.innerHTML = `<p style="color: var(--text-muted);">No feedback received yet.</p>`;
+            const payContainer = document.getElementById('paymentContainer');
+            payContainer.innerHTML = '';
+            if(payments.length === 0) {
+                payContainer.innerHTML = `<p style="color:var(--text-muted);">No payment account added yet.</p>`;
             } else {
-                feedbacks.forEach(f => {
-                    fbContainer.innerHTML += `
-                        <div class="feedback-card">
-                            <div class="feedback-header">
-                                <span><i class="fas fa-user"></i> ${f.name} (${f.contact})</span>
-                                <span style="color: var(--gold);">${f.rating}</span>
-                            </div>
-                            <p style="color: #ddd; margin-bottom: 8px;">${f.message}</p>
-                            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: #888;">
-                                <span>${f.created_at}</span>
-                                <button class="btn-danger" onclick="deleteFeedback(${f.id})">Delete</button>
-                            </div>
+                payments.forEach(p => {
+                    payContainer.innerHTML += `
+                        <div class="payment-card">
+                            <strong>${p.bank_name}</strong><br>
+                            Account: ${p.account_number}<br>
+                            Name: ${p.account_holder || ''}
                         </div>
                     `;
                 });
             }
+
+            renderFeaturedSlider();
+            buildCategories();
+            renderMenu(allMenuData);
         }
 
-        async function addMenu(e) {
-            e.preventDefault();
-            const formData = new FormData();
-            formData.append('title', document.getElementById('title').value);
-            formData.append('category', document.getElementById('category').value);
-            formData.append('price', document.getElementById('price').value);
-            formData.append('description', document.getElementById('description').value);
-            formData.append('is_featured', document.getElementById('is_featured').value);
-            formData.append('image', document.getElementById('imageFile').files[0]);
+        function changeLanguage() {
+            currentLang = document.getElementById('langSelect').value;
+            document.documentElement.lang = currentLang;
+            document.documentElement.dir = (currentLang === 'ar') ? 'rtl' : 'ltr';
+            
+            const dict = dictionary[currentLang];
+            document.getElementById('searchInput').placeholder = dict.search;
+            document.getElementById('payTitle').innerHTML = `<i class="fas fa-wallet"></i> ${dict.pay}`;
+            document.getElementById('closeModalBtn').innerText = dict.close;
+            document.getElementById('fbTitle').innerHTML = `<i class="fas fa-star"></i> ${dict.fbTitle}`;
+            document.getElementById('fbName').placeholder = dict.namePh;
+            document.getElementById('fbContact').placeholder = dict.contactPh;
+            document.getElementById('fbMessage').placeholder = dict.msgPh;
+            document.getElementById('submitFbBtn').innerText = dict.subBtn;
 
-            const res = await fetch('/api/menu', { method: 'POST', body: formData });
-            if(res.ok) { alert('Menu item added successfully!'); location.reload(); }
-            else { alert('Error adding item'); }
+            renderFeaturedSlider();
+            buildCategories();
+            filterMenu();
         }
 
-        async function deleteMenu(id) {
-            if(confirm('Are you sure to delete this item?')) {
-                await fetch(`/api/menu/${id}`, { method: 'DELETE' });
-                loadAdminData();
+        function renderFeaturedSlider() {
+            const featuredItems = allMenuData.filter(item => item.is_featured === 1);
+            const track = document.getElementById('sliderTrack');
+            track.innerHTML = '';
+
+            if(featuredItems.length === 0) {
+                document.getElementById('sliderWrapper').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('sliderWrapper').style.display = 'block';
+            featuredItems.forEach(item => {
+                track.innerHTML += `
+                    <div class="featured-card">
+                        <img src="${item.image_url || 'https://via.placeholder.com/100'}" alt="${item.title}">
+                        <div class="featured-info">
+                            <h3>🔥 ${dictionary[currentLang].specialTitle}</h3>
+                            <h4 style="color:#fff; margin-bottom:4px;">${item.title}</h4>
+                            <p>${item.description || ''}</p>
+                            <div class="featured-price">${item.price} Birr</div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Start auto slide if multiple featured items
+            if(featuredItems.length > 1) {
+                clearInterval(sliderInterval);
+                sliderInterval = setInterval(() => {
+                    currentSlide = (currentSlide + 1) % featuredItems.length;
+                    track.style.transform = `translateX(-${currentSlide * 100}%)`;
+                }, 3500);
             }
         }
 
-        async function addPayment(e) {
+        function buildCategories() {
+            const allCatText = dictionary[currentLang].all;
+            const uniqueCats = [...new Set(allMenuData.map(i => i.category))];
+            const container = document.getElementById('categoryContainer');
+            container.innerHTML = `<button class="cat-btn ${currentCategory === 'All' || currentCategory === 'ሁሉም' ? 'active' : ''}" onclick="selectCategory('All', this)">${allCatText}</button>`;
+            
+            uniqueCats.forEach(cat => {
+                const isActive = (currentCategory === cat);
+                container.innerHTML += `<button class="cat-btn ${isActive ? 'active' : ''}" onclick="selectCategory('${cat}', this)">${cat}</button>`;
+            });
+        }
+
+        function selectCategory(cat, btn) {
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentCategory = cat;
+            filterMenu();
+        }
+
+        function filterMenu() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = allMenuData.filter(item => {
+                const matchesSearch = item.title.toLowerCase().includes(query) || (item.description && item.description.toLowerCase().includes(query));
+                const matchesCat = (currentCategory === 'All' || currentCategory === 'ሁሉም' || item.category === currentCategory);
+                return matchesSearch && matchesCat;
+            });
+            renderMenu(filtered);
+        }
+
+        function renderMenu(data) {
+            const container = document.getElementById('menuContainer');
+            container.innerHTML = '';
+
+            if(data.length === 0) {
+                container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted);">${dictionary[currentLang].noFood}</div>`;
+                return;
+            }
+
+            data.forEach(item => {
+                container.innerHTML += `
+                    <div class="card" onclick='openModal(${JSON.stringify(item)})'>
+                        <div class="card-img-box">
+                            <img src="${item.image_url || 'https://via.placeholder.com/300'}" alt="${item.title}">
+                            ${item.is_featured ? '<span class="badge">Special</span>' : ''}
+                        </div>
+                        <div class="card-content">
+                            <div>
+                                <div class="card-title">${item.title}</div>
+                                <div class="card-desc">${item.description || ''}</div>
+                            </div>
+                            <div class="card-footer">
+                                <span class="price">${item.price} Birr</span>
+                                <button class="view-btn">${dictionary[currentLang].details}</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function selectRating(btn, ratingText) {
+            document.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            selectedRatingText = ratingText;
+        }
+
+        async function submitFeedback(e) {
             e.preventDefault();
             const data = {
-                bank_name: document.getElementById('bankName').value,
-                account_number: document.getElementById('accountNumber').value,
-                account_holder: document.getElementById('accountHolder').value
+                name: document.getElementById('fbName').value,
+                contact: document.getElementById('fbContact').value,
+                rating: selectedRatingText,
+                message: document.getElementById('fbMessage').value
             };
-            const res = await fetch('/api/payments', {
+
+            const res = await fetch('/api/feedback', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             });
-            if(res.ok) { alert('Payment added!'); location.reload(); }
-        }
 
-        async function deletePayment(id) {
-            if(confirm('Delete payment account?')) {
-                await fetch(`/api/payments/${id}`, { method: 'DELETE' });
-                loadAdminData();
+            if(res.ok) {
+                alert(dictionary[currentLang].successMsg);
+                document.getElementById('fbName').value = '';
+                document.getElementById('fbContact').value = '';
+                document.getElementById('fbMessage').value = '';
+            } else {
+                alert('Error submitting feedback.');
             }
         }
 
-        async function deleteFeedback(id) {
-            if(confirm('Delete this feedback?')) {
-                await fetch(`/api/feedback/${id}`, { method: 'DELETE' });
-                loadAdminData();
-            }
+        function openModal(item) {
+            document.getElementById('modalImg').src = item.image_url || 'https://via.placeholder.com/300';
+            document.getElementById('modalTitle').innerText = item.title;
+            document.getElementById('modalDesc').innerText = item.description || '';
+            document.getElementById('modalPrice').innerText = item.price + ' Birr';
+            document.getElementById('foodModal').classList.add('active');
         }
 
-        loadAdminData();
+        function closeModal(e) {
+            if(e.target.id === 'foodModal') document.getElementById('foodModal').classList.remove('active');
+        }
+
+        function closeModalDirect() {
+            document.getElementById('foodModal').classList.remove('active');
+        }
     </script>
 </body>
 </html>
