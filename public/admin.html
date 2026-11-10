@@ -21,6 +21,8 @@
         .btn { background: var(--gold); color: #000; border: none; padding: 12px 25px; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.2s; }
         .btn:hover { opacity: 0.9; transform: translateY(-2px); }
         .btn-danger { background: #e74c3c; color: #fff; padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; border: none; cursor: pointer; }
+        .btn-status { background: #27ae60; color: #fff; padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; border: none; cursor: pointer; margin-right: 5px; }
+        .btn-status.inactive { background: #c0392b; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; }
         th, td { padding: 12px; text-align: left; border-bottom: 1px solid #333; }
         th { color: var(--gold); background: #181818; }
@@ -33,7 +35,37 @@
     <div class="container">
         <div class="admin-header">
             <h1><i class="fas fa-crown"></i> Hijra Restaurant Admin Dashboard</h1>
-            <p>Manage your menu items, payments, and customer feedbacks easily.</p>
+            <p>Manage menu items, availability status, restaurant profile, and customer feedbacks.</p>
+        </div>
+
+        <!-- Restaurant Settings & Logo & Bio -->
+        <div class="section">
+            <h2><i class="fas fa-store"></i> Restaurant Profile, Logo & Subtitle (Bio)</h2>
+            <form id="settingsForm" onsubmit="updateSettings(event)">
+                <div class="form-grid">
+                    <div>
+                        <label style="color:var(--text-muted); font-size:0.85rem;">Restaurant Name:</label>
+                        <input type="text" id="setRestName" required>
+                    </div>
+                    <div>
+                        <label style="color:var(--text-muted); font-size:0.85rem;">Working Hours:</label>
+                        <input type="text" id="setHours" required>
+                    </div>
+                    <div>
+                        <label style="color:var(--text-muted); font-size:0.85rem;">Address / Location:</label>
+                        <input type="text" id="setAddress" required>
+                    </div>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label style="color:var(--text-muted); font-size:0.85rem;">Subtitle / Bio Description:</label>
+                    <textarea id="setSubtitle" required></textarea>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label style="color:var(--text-muted); font-size:0.85rem;">Restaurant Logo Image:</label>
+                    <input type="file" id="logoFile" accept="image/*">
+                </div>
+                <button type="submit" class="btn"><i class="fas fa-save"></i> Save Profile Settings</button>
+            </form>
         </div>
 
         <!-- Add Menu Item -->
@@ -58,9 +90,9 @@
             </form>
         </div>
 
-        <!-- Manage Menu Items -->
+        <!-- Manage Menu Items & Stock Status -->
         <div class="section">
-            <h2><i class="fas fa-list"></i> Existing Menu Items</h2>
+            <h2><i class="fas fa-list"></i> Menu Items & Availability Status (Out of Stock)</h2>
             <div style="overflow-x: auto;">
                 <table>
                     <thead>
@@ -69,8 +101,8 @@
                             <th>Name</th>
                             <th>Category</th>
                             <th>Price</th>
-                            <th>Special</th>
-                            <th>Action</th>
+                            <th>Status</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody id="menuTableBody"></tbody>
@@ -80,7 +112,7 @@
 
         <!-- Payment Options -->
         <div class="section">
-            <h2><i class="fas fa-wallet"></i> Manage Payment Options (CBE, Telebirr, etc.)</h2>
+            <h2><i class="fas fa-wallet"></i> Manage Payment Options</h2>
             <form id="paymentForm" onsubmit="addPayment(event)">
                 <div class="form-grid">
                     <input type="text" id="bankName" placeholder="Bank Name (e.g. CBE / Telebirr)" required>
@@ -102,21 +134,39 @@
     </div>
 
     <script>
+        let currentLogoUrl = '';
+
         async function loadAdminData() {
+            // Settings
+            const resSet = await fetch('/api/settings');
+            const settings = await resSet.json();
+            document.getElementById('setRestName').value = settings.restaurant_name || '';
+            document.getElementById('setHours').value = settings.working_hours || '';
+            document.getElementById('setAddress').value = settings.address || '';
+            document.getElementById('setSubtitle').value = settings.subtitle || '';
+            currentLogoUrl = settings.logo_url || '';
+
             // Menu
             const resMenu = await fetch('/api/menu');
             const menu = await resMenu.json();
             const tbody = document.getElementById('menuTableBody');
             tbody.innerHTML = '';
             menu.forEach(item => {
+                const isAvail = item.is_available === 1;
                 tbody.innerHTML += `
                     <tr>
                         <td><img src="${item.image_url || 'https://via.placeholder.com/50'}" style="width:40px; height:40px; object-fit:cover; border-radius:6px;"></td>
                         <td><strong>${item.title}</strong></td>
                         <td>${item.category}</td>
                         <td>${item.price} Birr</td>
-                        <td>${item.is_featured ? '<span class="badge-special">Special</span>' : '-'}</td>
-                        <td><button class="btn-danger" onclick="deleteMenu(${item.id})"><i class="fas fa-trash"></i></button></td>
+                        <td>
+                            <button class="btn-status ${isAvail ? '' : 'inactive'}" onclick="toggleStatus(${item.id}, ${isAvail})">
+                                ${isAvail ? '🟢 Available' : '🔴 Out of Stock'}
+                            </button>
+                        </td>
+                        <td>
+                            <button class="btn-danger" onclick="deleteMenu(${item.id})"><i class="fas fa-trash"></i></button>
+                        </td>
                     </tr>
                 `;
             });
@@ -161,6 +211,38 @@
             }
         }
 
+        async function updateSettings(e) {
+            e.preventDefault();
+            const formData = new FormData();
+            formData.append('restaurant_name', document.getElementById('setRestName').value);
+            formData.append('working_hours', document.getElementById('setHours').value);
+            formData.append('address', document.getElementById('setAddress').value);
+            formData.append('subtitle', document.getElementById('setSubtitle').value);
+            formData.append('old_logo_url', currentLogoUrl);
+            
+            const logoInput = document.getElementById('logoFile').files[0];
+            if(logoInput) formData.append('logo', logoInput);
+
+            const res = await fetch('/api/settings', { method: 'POST', body: formData });
+            if(res.ok) { alert('Settings updated successfully!'); location.reload(); }
+            else { alert('Error updating settings'); }
+        }
+
+        async function toggleStatus(id, currentStatus) {
+            let reason = '';
+            if(currentStatus) {
+                reason = prompt("ይህ ምግብ አልቋል? ለተጠቃሚዎች የሚታየውን ምክንያት ያስገቡ (ለምሳሌ: For today out of stock / ለጊዜው አልቋል):", "ለጊዜው አልቋል (Out of Stock)");
+                if(reason === null) return;
+            }
+            const newStatus = currentStatus ? 0 : 1;
+            await fetch(`/api/menu/status/${id}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ is_available: newStatus, unavailable_reason: reason })
+            });
+            loadAdminData();
+        }
+
         async function addMenu(e) {
             e.preventDefault();
             const formData = new FormData();
@@ -173,7 +255,6 @@
 
             const res = await fetch('/api/menu', { method: 'POST', body: formData });
             if(res.ok) { alert('Menu item added successfully!'); location.reload(); }
-            else { alert('Error adding item'); }
         }
 
         async function deleteMenu(id) {
