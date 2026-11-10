@@ -1,314 +1,218 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Digital Menu - Luxury Restaurant</title>
+    <title>Luxury Admin Dashboard - Hijra Restaurant</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --gold: #d4af37; --dark: #121212; --card-bg: #1e1e1e; --text-light: #f8f9fa; --text-muted: #adb5bd; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
-        body { background-color: var(--dark); color: var(--text-light); padding-bottom: 60px; }
-
-        .header { background: linear-gradient(135deg, #000000, #1a1a1a); color: white; padding: 40px 20px; text-align: center; border-bottom: 2px solid var(--gold); box-shadow: 0 10px 30px rgba(212,175,55,0.15); }
-        .header h1 { font-size: 2.2rem; margin-bottom: 8px; font-weight: 800; color: var(--gold); letter-spacing: 1px; }
-        .header p { font-size: 0.95rem; opacity: 0.85; max-width: 600px; margin: 0 auto 15px auto; line-height: 1.4; color: #ddd; }
-        .info-badges { display: flex; justify-content: center; gap: 15px; font-size: 0.85rem; color: var(--gold); flex-wrap: wrap; }
-        .info-badges span { background: rgba(212,175,55,0.1); padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(212,175,55,0.3); }
-
-        .controls-container { max-width: 800px; margin: -25px auto 25px auto; padding: 0 20px; z-index: 10; position: relative; }
-        .search-lang-box { background: var(--card-bg); padding: 12px 20px; border-radius: 50px; box-shadow: 0 8px 25px rgba(0,0,0,0.5); display: flex; align-items: center; gap: 15px; border: 1px solid rgba(212,175,55,0.3); }
-        .search-lang-box input { flex: 1; border: none; outline: none; font-size: 1rem; color: var(--text-light); background: transparent; }
-        .search-lang-box select { border: 1px solid rgba(212,175,55,0.4); padding: 6px 15px; border-radius: 20px; background: #2a2a2a; color: var(--gold); font-weight: 600; cursor: pointer; outline: none; }
-
-        .featured-banner { max-width: 800px; margin: 0 auto 25px auto; padding: 0 20px; }
-        .featured-card { background: linear-gradient(135deg, #2a2410, #1e1e1e); border: 1px solid var(--gold); border-radius: 16px; padding: 20px; display: flex; gap: 20px; align-items: center; box-shadow: 0 8px 20px rgba(212,175,55,0.1); }
-        .featured-card img { width: 100px; height: 100px; object-fit: cover; border-radius: 12px; border: 1px solid var(--gold); }
-        .featured-info h3 { color: var(--gold); font-size: 1.2rem; margin-bottom: 5px; }
-        .featured-info p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px; }
-        .featured-price { color: #fff; font-weight: bold; font-size: 1.1rem; }
-
-        .categories-wrapper { max-width: 800px; margin: 0 auto 25px auto; padding: 0 20px; overflow-x: auto; display: flex; gap: 10px; scrollbar-width: none; }
-        .categories-wrapper::-webkit-scrollbar { display: none; }
-        .cat-btn { background: var(--card-bg); border: 1px solid #333; color: var(--text-muted); padding: 9px 20px; border-radius: 20px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: all 0.2s ease; }
-        .cat-btn.active, .cat-btn:hover { background: var(--gold); color: #000; border-color: var(--gold); font-weight: 700; box-shadow: 0 4px 15px rgba(212,175,55,0.3); }
-
-        .menu-container { max-width: 800px; margin: 0 auto; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
-        .card { background: var(--card-bg); border-radius: 16px; overflow: hidden; border: 1px solid #2a2a2a; transition: transform 0.2s ease, border-color 0.2s; cursor: pointer; display: flex; flex-direction: column; }
-        .card:hover { transform: translateY(-4px); border-color: var(--gold); }
-        .card-img-box { width: 100%; height: 170px; overflow: hidden; position: relative; background: #000; }
-        .card-img-box img { width: 100%; height: 100%; object-fit: cover; }
-        .badge { position: absolute; top: 10px; right: 10px; background: var(--gold); color: #000; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: bold; }
-        
-        .card-content { padding: 16px; display: flex; flex-direction: column; flex: 1; justify-content: space-between; }
-        .card-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 6px; color: #fff; }
-        .card-desc { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px; display: -webkit-box; line-clamp: 2; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .card-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #2a2a2a; padding-top: 12px; }
-        .price { font-size: 1.2rem; font-weight: 800; color: var(--gold); }
-        .view-btn { background: rgba(212,175,55,0.15); color: var(--gold); border: 1px solid rgba(212,175,55,0.3); padding: 6px 14px; border-radius: 10px; font-size: 0.8rem; font-weight: 600; }
-
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 100; justify-content: center; align-items: flex-end; backdrop-filter: blur(5px); }
-        .modal.active { display: flex; }
-        .modal-content { background: var(--card-bg); border: 1px solid var(--gold); width: 100%; max-width: 600px; border-top-left-radius: 25px; border-top-right-radius: 25px; max-height: 85vh; overflow-y: auto; padding: 25px; animation: slideUp 0.3s ease; }
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-        .modal-img { width: 100%; height: 230px; object-fit: cover; border-radius: 16px; margin-bottom: 15px; border: 1px solid var(--gold); }
-
-        .footer { max-width: 800px; margin: 40px auto 20px auto; padding: 25px 20px; text-align: center; border-top: 1px solid #2a2a2a; }
-        .payment-section { background: var(--card-bg); border: 1px solid #2a2a2a; padding: 20px; border-radius: 16px; margin-bottom: 25px; text-align: left; }
-        .payment-section h3 { font-size: 1.1rem; margin-bottom: 12px; color: var(--gold); display: flex; align-items: center; gap: 8px; }
-        .payment-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
-        .payment-card { background: #181818; border: 1px solid #333; padding: 12px; border-radius: 10px; font-size: 0.9rem; }
-        .payment-card strong { color: var(--gold); }
-
-        .social-icons { display: flex; justify-content: center; gap: 20px; margin-bottom: 18px; font-size: 1.5rem; }
-        .social-icons a { color: var(--text-muted); transition: color 0.2s; }
-        .social-icons a:hover { color: var(--gold); }
-        .dev-credit { font-size: 0.85rem; color: var(--text-muted); }
-        .dev-credit a { color: var(--gold); text-decoration: none; font-weight: 600; }
+        body { background-color: var(--dark); color: var(--text-light); padding: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .admin-header { background: linear-gradient(135deg, #000, #1a1a1a); padding: 25px; border-radius: 16px; border: 2px solid var(--gold); text-align: center; margin-bottom: 25px; box-shadow: 0 10px 30px rgba(212,175,55,0.15); }
+        .admin-header h1 { color: var(--gold); font-size: 2rem; margin-bottom: 5px; }
+        .section { background: var(--card-bg); border: 1px solid #333; padding: 20px; border-radius: 16px; margin-bottom: 25px; }
+        .section h2 { color: var(--gold); font-size: 1.3rem; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 15px; }
+        input, select, textarea { width: 100%; padding: 12px; background: #121212; border: 1px solid #444; color: #fff; border-radius: 10px; outline: none; font-size: 0.95rem; }
+        input:focus, select:focus, textarea:focus { border-color: var(--gold); }
+        textarea { resize: vertical; height: 80px; }
+        .btn { background: var(--gold); color: #000; border: none; padding: 12px 25px; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .btn:hover { opacity: 0.9; transform: translateY(-2px); }
+        .btn-danger { background: #e74c3c; color: #fff; padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; border: none; cursor: pointer; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #333; }
+        th { color: var(--gold); background: #181818; }
+        .badge-special { background: var(--gold); color: #000; padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: bold; }
+        .feedback-card { background: #181818; border: 1px solid #333; padding: 15px; border-radius: 10px; margin-bottom: 10px; }
+        .feedback-header { display: flex; justify-content: space-between; margin-bottom: 6px; font-weight: bold; color: var(--gold); }
     </style>
 </head>
 <body>
-
-    <div class="header">
-        <h1 id="restName">Hijra Restaurant</h1>
-        <p id="subTitle">Welcome! Choose from our delicious luxury menu</p>
-        <div class="info-badges">
-            <span id="hoursBadge"><i class="fas fa-clock"></i> 08:00 AM - 10:00 PM</span>
-            <span id="addressBadge"><i class="fas fa-map-marker-alt"></i> Addis Ababa</span>
+    <div class="container">
+        <div class="admin-header">
+            <h1><i class="fas fa-crown"></i> Hijra Restaurant Admin Dashboard</h1>
+            <p>Manage your menu items, payments, and customer feedbacks easily.</p>
         </div>
-    </div>
 
-    <div class="controls-container">
-        <div class="search-lang-box">
-            <i class="fas fa-search" style="color: var(--gold);"></i>
-            <input type="text" id="searchInput" placeholder="Search food or drink..." oninput="filterMenu()">
-            <select id="langSelect" onchange="changeLanguage()">
-                <option value="en" selected>English</option>
-                <option value="am">አማርኛ</option>
-                <option value="ar">العربية</option>
-                <option value="fr">Français</option>
-                <option value="tr">Türkçe</option>
-                <option value="zh">中文</option>
-            </select>
+        <!-- Add Menu Item -->
+        <div class="section">
+            <h2><i class="fas fa-utensils"></i> Add Menu Item / Food / Drink</h2>
+            <form id="menuForm" onsubmit="addMenu(event)">
+                <div class="form-grid">
+                    <input type="text" id="title" placeholder="Food/Drink Name (e.g. Mandi)" required>
+                    <input type="text" id="category" placeholder="Category (e.g. Lunch, Drinks)" required>
+                    <input type="number" step="0.01" id="price" placeholder="Price (Birr)" required>
+                    <select id="is_featured">
+                        <option value="0">Normal Item</option>
+                        <option value="1">⭐ Today's Special (Featured Slider)</option>
+                    </select>
+                </div>
+                <textarea id="description" placeholder="Description..."></textarea>
+                <div style="margin: 15px 0;">
+                    <label style="display: block; margin-bottom: 5px; color: var(--text-muted);">Food/Drink Image:</label>
+                    <input type="file" id="imageFile" accept="image/*" required>
+                </div>
+                <button type="submit" class="btn"><i class="fas fa-plus"></i> Add Item</button>
+            </form>
         </div>
-    </div>
 
-    <div class="featured-banner" id="featuredBanner"></div>
-
-    <div class="categories-wrapper" id="categoryContainer"></div>
-    <div class="menu-container" id="menuContainer"></div>
-
-    <div style="max-width: 800px; margin: 30px auto; padding: 0 20px;">
-        <div class="payment-section">
-            <h3 id="payTitle"><i class="fas fa-wallet"></i> Payment Options</h3>
-            <div class="payment-grid" id="paymentContainer"></div>
+        <!-- Manage Menu Items -->
+        <div class="section">
+            <h2><i class="fas fa-list"></i> Existing Menu Items</h2>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Special</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="menuTableBody"></tbody>
+                </table>
+            </div>
         </div>
-    </div>
 
-    <div class="modal" id="foodModal" onclick="closeModal(event)">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <img id="modalImg" class="modal-img" src="" alt="">
-            <h2 id="modalTitle" style="margin-bottom: 10px; color: var(--gold);"></h2>
-            <p id="modalDesc" style="color: var(--text-muted); margin-bottom: 15px; line-height: 1.5;"></p>
-            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #333; padding-top: 15px;">
-                <span id="modalPrice" class="price" style="font-size: 1.3rem;"></span>
-                <button id="closeModalBtn" onclick="closeModalDirect()" style="background: var(--gold); color: #000; border: none; padding: 10px 20px; border-radius: 12px; font-weight: bold; cursor: pointer;">Close</button>
+        <!-- Payment Options -->
+        <div class="section">
+            <h2><i class="fas fa-wallet"></i> Manage Payment Options (CBE, Telebirr, etc.)</h2>
+            <form id="paymentForm" onsubmit="addPayment(event)">
+                <div class="form-grid">
+                    <input type="text" id="bankName" placeholder="Bank Name (e.g. CBE / Telebirr)" required>
+                    <input type="text" id="accountNumber" placeholder="Account Number" required>
+                    <input type="text" id="accountHolder" placeholder="Account Holder Name (Name)" required>
+                </div>
+                <button type="submit" class="btn"><i class="fas fa-plus"></i> Add Payment Account</button>
+            </form>
+            <div style="margin-top: 15px;" id="paymentList"></div>
+        </div>
+
+        <!-- Customer Feedbacks & Ratings -->
+        <div class="section">
+            <h2><i class="fas fa-comments"></i> Customer Feedbacks & Ratings</h2>
+            <div id="feedbackContainer">
+                <p style="color: var(--text-muted);">Loading feedbacks...</p>
             </div>
         </div>
     </div>
 
-    <div class="footer">
-        <div class="social-icons" id="socialIcons"></div>
-        <div class="dev-credit">
-            Powered & Developed by <a id="devLink" href="#" target="_blank">Expert Developer</a>
-        </div>
-    </div>
-
     <script>
-        let allMenuData = [];
-        let currentLang = 'en';
-        let currentCategory = 'All';
-
-        const dictionary = {
-            en: { all: "All", pay: "Payment Options", search: "Search food or drink...", close: "Close", details: "Details", noFood: "No food items found", specialTitle: "Today's Special Recommendation" },
-            am: { all: "ሁሉም", pay: "የክፍያ አማራጮች", search: "ምግብ ወይም መጠጥ ይፈልጉ...", close: "ዝጋ", details: "ዝርዝር", noFood: "ምንም ምግብ አልተገኘም", specialTitle: "የዛሬ ልዩ የምግብ ጥቆማ" },
-            ar: { all: "الكل", pay: "خيارات الدفع", search: "ابحث عن طعام أو شراب...", close: "إغلاق", details: "تفاصيل", noFood: "لم يتم العثور على طعام", specialTitle: "عرض اليوم المميز" },
-            fr: { all: "Tout", pay: "Options de Paiement", search: "Rechercher...", close: "Fermer", details: "Détails", noFood: "Aucun plat trouvé", specialTitle: "Spécial du Jour" },
-            tr: { all: "Tümü", pay: "Ödeme Seçenekleri", search: "Yemek veya içecek ara...", close: "Kapat", details: "Detay", noFood: "Yemek bulunamadı", specialTitle: "Günün Özel Önerisi" },
-            zh: { all: "全部", pay: "付款方式", search: "搜索食物或饮料...", close: "关闭", details: "详情", noFood: "未找到食物", specialTitle: "今日特色推荐" }
-        };
-
-        function translateText(text) {
-            if (!text) return '';
-            if (dictionary[currentLang] && dictionary[currentLang][text]) {
-                return dictionary[currentLang][text];
-            }
-            return text;
-        }
-
-        async function loadData() {
-            const [menuRes, settingsRes, paymentRes] = await Promise.all([
-                fetch('/api/menu'),
-                fetch('/api/settings'),
-                fetch('/api/payments')
-            ]);
-            allMenuData = await menuRes.json();
-            const settings = await settingsRes.json();
-            const payments = await paymentRes.json();
-
-            document.getElementById('restName').innerText = settings.restaurant_name || 'Hijra Restaurant';
-            document.getElementById('subTitle').innerText = settings.subtitle || 'Welcome! Choose from our delicious luxury menu';
-            document.getElementById('hoursBadge').innerHTML = `<i class="fas fa-clock"></i> ${settings.working_hours || '08:00 AM - 10:00 PM'}`;
-            document.getElementById('addressBadge').innerHTML = `<i class="fas fa-map-marker-alt"></i> ${settings.address || 'Addis Ababa'}`;
-            
-            document.getElementById('devLink').href = settings.developer_link || '#';
-            document.getElementById('devLink').innerText = "Expert Developer / ባለቤት";
-
-            // Social Icons
-            let socialHTML = '';
-            if(settings.social_facebook) socialHTML += `<a href="${settings.social_facebook}" target="_blank"><i class="fab fa-facebook"></i></a>`;
-            if(settings.social_tiktok) socialHTML += `<a href="${settings.social_tiktok}" target="_blank"><i class="fab fa-tiktok"></i></a>`;
-            if(settings.social_instagram) socialHTML += `<a href="${settings.social_instagram}" target="_blank"><i class="fab fa-instagram"></i></a>`;
-            if(settings.social_whatsapp) socialHTML += `<a href="${settings.social_whatsapp}" target="_blank"><i class="fab fa-whatsapp"></i></a>`;
-            if(settings.social_email) socialHTML += `<a href="mailto:${settings.social_email}"><i class="fas fa-envelope"></i></a>`;
-            document.getElementById('socialIcons').innerHTML = socialHTML;
+        async function loadAdminData() {
+            // Menu
+            const resMenu = await fetch('/api/menu');
+            const menu = await resMenu.json();
+            const tbody = document.getElementById('menuTableBody');
+            tbody.innerHTML = '';
+            menu.forEach(item => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td><img src="${item.image_url || 'https://via.placeholder.com/50'}" style="width:40px; height:40px; object-fit:cover; border-radius:6px;"></td>
+                        <td><strong>${item.title}</strong></td>
+                        <td>${item.category}</td>
+                        <td>${item.price} Birr</td>
+                        <td>${item.is_featured ? '<span class="badge-special">Special</span>' : '-'}</td>
+                        <td><button class="btn-danger" onclick="deleteMenu(${item.id})"><i class="fas fa-trash"></i></button></td>
+                    </tr>
+                `;
+            });
 
             // Payments
-            const payContainer = document.getElementById('paymentContainer');
-            payContainer.innerHTML = '';
-            if(payments.length === 0) {
-                payContainer.innerHTML = `<p style="color:var(--text-muted);">No payment account added yet.</p>`;
+            const resPay = await fetch('/api/payments');
+            const payments = await resPay.json();
+            const payList = document.getElementById('paymentList');
+            payList.innerHTML = '';
+            payments.forEach(p => {
+                payList.innerHTML += `
+                    <div style="display: flex; justify-content: space-between; align-items: center; background: #121212; padding: 10px; border-radius: 8px; margin-bottom: 8px; border: 1px solid #333;">
+                        <div><strong>${p.bank_name}</strong> - Account: ${p.account_number} - <em>Name: ${p.account_holder || ''}</em></div>
+                        <button class="btn-danger" onclick="deletePayment(${p.id})">Delete</button>
+                    </div>
+                `;
+            });
+
+            // Feedbacks
+            const resFb = await fetch('/api/feedback');
+            const feedbacks = await resFb.json();
+            const fbContainer = document.getElementById('feedbackContainer');
+            fbContainer.innerHTML = '';
+            if(feedbacks.length === 0) {
+                fbContainer.innerHTML = `<p style="color: var(--text-muted);">No feedback received yet.</p>`;
             } else {
-                payments.forEach(p => {
-                    payContainer.innerHTML += `
-                        <div class="payment-card">
-                            <strong>${p.bank_name}</strong><br>
-                            Account: ${p.account_number}<br>
-                            Holder: ${p.account_holder || ''}
+                feedbacks.forEach(f => {
+                    fbContainer.innerHTML += `
+                        <div class="feedback-card">
+                            <div class="feedback-header">
+                                <span><i class="fas fa-user"></i> ${f.name} (${f.contact})</span>
+                                <span style="color: var(--gold);">${f.rating}</span>
+                            </div>
+                            <p style="color: #ddd; margin-bottom: 8px;">${f.message}</p>
+                            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: #888;">
+                                <span>${f.created_at}</span>
+                                <button class="btn-danger" onclick="deleteFeedback(${f.id})">Delete</button>
+                            </div>
                         </div>
                     `;
                 });
             }
-
-            renderFeaturedBanner();
-            buildCategories();
-            renderMenu(allMenuData);
         }
 
-        function changeLanguage() {
-            currentLang = document.getElementById('langSelect').value;
-            document.documentElement.lang = currentLang;
-            document.documentElement.dir = (currentLang === 'ar') ? 'rtl' : 'ltr';
-            
-            document.getElementById('searchInput').placeholder = dictionary[currentLang].search;
-            document.getElementById('payTitle').innerHTML = `<i class="fas fa-wallet"></i> ${dictionary[currentLang].pay}`;
-            document.getElementById('closeModalBtn').innerText = dictionary[currentLang].close;
+        async function addMenu(e) {
+            e.preventDefault();
+            const formData = new FormData();
+            formData.append('title', document.getElementById('title').value);
+            formData.append('category', document.getElementById('category').value);
+            formData.append('price', document.getElementById('price').value);
+            formData.append('description', document.getElementById('description').value);
+            formData.append('is_featured', document.getElementById('is_featured').value);
+            formData.append('image', document.getElementById('imageFile').files[0]);
 
-            renderFeaturedBanner();
-            buildCategories();
-            filterMenu();
+            const res = await fetch('/api/menu', { method: 'POST', body: formData });
+            if(res.ok) { alert('Menu item added successfully!'); location.reload(); }
+            else { alert('Error adding item'); }
         }
 
-        function renderFeaturedBanner() {
-            const featured = allMenuData.find(item => item.is_featured === 1);
-            const banner = document.getElementById('featuredBanner');
-            if(!featured) {
-                banner.innerHTML = '';
-                return;
+        async function deleteMenu(id) {
+            if(confirm('Are you sure to delete this item?')) {
+                await fetch(`/api/menu/${id}`, { method: 'DELETE' });
+                loadAdminData();
             }
-
-            banner.innerHTML = `
-                <div class="featured-card">
-                    <img src="${featured.image_url || 'https://via.placeholder.com/100'}" alt="${featured.title}">
-                    <div class="featured-info">
-                        <h3>🔥 ${dictionary[currentLang].specialTitle}</h3>
-                        <h4 style="color:#fff; margin-bottom:4px;">${featured.title}</h4>
-                        <p>${featured.description || ''}</p>
-                        <div class="featured-price">${featured.price} Birr</div>
-                    </div>
-                </div>
-            `;
         }
 
-        function buildCategories() {
-            const allCatText = dictionary[currentLang].all;
-            const uniqueCats = [...new Set(allMenuData.map(i => i.category))];
-            const container = document.getElementById('categoryContainer');
-            container.innerHTML = `<button class="cat-btn ${currentCategory === 'All' || currentCategory === 'ሁሉም' ? 'active' : ''}" onclick="selectCategory('All', this)">${allCatText}</button>`;
-            
-            uniqueCats.forEach(cat => {
-                const isActive = (currentCategory === cat);
-                container.innerHTML += `<button class="cat-btn ${isActive ? 'active' : ''}" onclick="selectCategory('${cat}', this)">${cat}</button>`;
+        async function addPayment(e) {
+            e.preventDefault();
+            const data = {
+                bank_name: document.getElementById('bankName').value,
+                account_number: document.getElementById('accountNumber').value,
+                account_holder: document.getElementById('accountHolder').value
+            };
+            const res = await fetch('/api/payments', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
             });
+            if(res.ok) { alert('Payment added!'); location.reload(); }
         }
 
-        function selectCategory(cat, btn) {
-            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            currentCategory = cat;
-            filterMenu();
-        }
-
-        function filterMenu() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-
-            const filtered = allMenuData.filter(item => {
-                const matchesSearch = item.title.toLowerCase().includes(query) || (item.description && item.description.toLowerCase().includes(query));
-                const matchesCat = (currentCategory === 'All' || currentCategory === 'ሁሉም' || item.category === currentCategory);
-                return matchesSearch && matchesCat;
-            });
-
-            renderMenu(filtered);
-        }
-
-        function renderMenu(data) {
-            const container = document.getElementById('menuContainer');
-            container.innerHTML = '';
-
-            if(data.length === 0) {
-                container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted);">${dictionary[currentLang].noFood}</div>`;
-                return;
+        async function deletePayment(id) {
+            if(confirm('Delete payment account?')) {
+                await fetch(`/api/payments/${id}`, { method: 'DELETE' });
+                loadAdminData();
             }
-
-            data.forEach(item => {
-                container.innerHTML += `
-                    <div class="card" onclick='openModal(${JSON.stringify(item)})'>
-                        <div class="card-img-box">
-                            <img src="${item.image_url || 'https://via.placeholder.com/300'}" alt="${item.title}">
-                            ${item.is_featured ? '<span class="badge">Special</span>' : ''}
-                        </div>
-                        <div class="card-content">
-                            <div>
-                                <div class="card-title">${item.title}</div>
-                                <div class="card-desc">${item.description || ''}</div>
-                            </div>
-                            <div class="card-footer">
-                                <span class="price">${item.price} Birr</span>
-                                <button class="view-btn">${dictionary[currentLang].details}</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
         }
 
-        function openModal(item) {
-            document.getElementById('modalImg').src = item.image_url || 'https://via.placeholder.com/300';
-            document.getElementById('modalTitle').innerText = item.title;
-            document.getElementById('modalDesc').innerText = item.description || '';
-            document.getElementById('modalPrice').innerText = item.price + ' Birr';
-            document.getElementById('foodModal').classList.add('active');
+        async function deleteFeedback(id) {
+            if(confirm('Delete this feedback?')) {
+                await fetch(`/api/feedback/${id}`, { method: 'DELETE' });
+                loadAdminData();
+            }
         }
 
-        function closeModal(e) {
-            if(e.target.id === 'foodModal') document.getElementById('foodModal').classList.remove('active');
-        }
-
-        function closeModalDirect() {
-            document.getElementById('foodModal').classList.remove('active');
-        }
-
-        loadData();
+        loadAdminData();
     </script>
 </body>
 </html>
