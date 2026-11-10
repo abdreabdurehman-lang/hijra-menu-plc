@@ -21,12 +21,13 @@
         .btn { background: var(--gold); color: #000; border: none; padding: 12px 25px; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.2s; }
         .btn:hover { opacity: 0.9; transform: translateY(-2px); }
         .btn-danger { background: #e74c3c; color: #fff; padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; border: none; cursor: pointer; }
-        .btn-status { background: #27ae60; color: #fff; padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; border: none; cursor: pointer; margin-right: 5px; }
+        .btn-status { background: #27ae60; color: #fff; padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; border: none; cursor: pointer; margin-right: 5px; font-weight: bold; }
         .btn-status.inactive { background: #c0392b; }
+        .btn-special { background: #3498db; color: #fff; padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; border: none; cursor: pointer; margin-right: 5px; }
+        .btn-special.active { background: #f39c12; font-weight: bold; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; }
         th, td { padding: 12px; text-align: left; border-bottom: 1px solid #333; }
         th { color: var(--gold); background: #181818; }
-        .badge-special { background: var(--gold); color: #000; padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: bold; }
         .feedback-card { background: #181818; border: 1px solid #333; padding: 15px; border-radius: 10px; margin-bottom: 10px; }
         .feedback-header { display: flex; justify-content: space-between; margin-bottom: 6px; font-weight: bold; color: var(--gold); }
     </style>
@@ -35,7 +36,7 @@
     <div class="container">
         <div class="admin-header">
             <h1><i class="fas fa-crown"></i> Hijra Restaurant Admin Dashboard</h1>
-            <p>Manage menu items, availability status, restaurant profile, and customer feedbacks.</p>
+            <p>Manage menu items, availability status, profile, and customer feedbacks.</p>
         </div>
 
         <!-- Restaurant Settings & Logo & Bio -->
@@ -92,7 +93,7 @@
 
         <!-- Manage Menu Items & Stock Status -->
         <div class="section">
-            <h2><i class="fas fa-list"></i> Menu Items & Availability Status (Out of Stock)</h2>
+            <h2><i class="fas fa-list"></i> Menu Items, Stock Status & Special Selector</h2>
             <div style="overflow-x: auto;">
                 <table>
                     <thead>
@@ -101,7 +102,8 @@
                             <th>Name</th>
                             <th>Category</th>
                             <th>Price</th>
-                            <th>Status</th>
+                            <th>Stock Status</th>
+                            <th>Special Slider</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -137,7 +139,6 @@
         let currentLogoUrl = '';
 
         async function loadAdminData() {
-            // Settings
             const resSet = await fetch('/api/settings');
             const settings = await resSet.json();
             document.getElementById('setRestName').value = settings.restaurant_name || '';
@@ -146,13 +147,13 @@
             document.getElementById('setSubtitle').value = settings.subtitle || '';
             currentLogoUrl = settings.logo_url || '';
 
-            // Menu
             const resMenu = await fetch('/api/menu');
             const menu = await resMenu.json();
             const tbody = document.getElementById('menuTableBody');
             tbody.innerHTML = '';
             menu.forEach(item => {
                 const isAvail = item.is_available === 1;
+                const isSpecial = item.is_featured === 1;
                 tbody.innerHTML += `
                     <tr>
                         <td><img src="${item.image_url || 'https://via.placeholder.com/50'}" style="width:40px; height:40px; object-fit:cover; border-radius:6px;"></td>
@@ -165,13 +166,17 @@
                             </button>
                         </td>
                         <td>
+                            <button class="btn-special ${isSpecial ? 'active' : ''}" onclick="toggleSpecial(${item.id}, ${isSpecial})">
+                                ${isSpecial ? '⭐ Special (Active)' : 'Make Special'}
+                            </button>
+                        </td>
+                        <td>
                             <button class="btn-danger" onclick="deleteMenu(${item.id})"><i class="fas fa-trash"></i></button>
                         </td>
                     </tr>
                 `;
             });
 
-            // Payments
             const resPay = await fetch('/api/payments');
             const payments = await resPay.json();
             const payList = document.getElementById('paymentList');
@@ -185,7 +190,6 @@
                 `;
             });
 
-            // Feedbacks
             const resFb = await fetch('/api/feedback');
             const feedbacks = await resFb.json();
             const fbContainer = document.getElementById('feedbackContainer');
@@ -225,13 +229,12 @@
 
             const res = await fetch('/api/settings', { method: 'POST', body: formData });
             if(res.ok) { alert('Settings updated successfully!'); location.reload(); }
-            else { alert('Error updating settings'); }
         }
 
         async function toggleStatus(id, currentStatus) {
             let reason = '';
             if(currentStatus) {
-                reason = prompt("ይህ ምግብ አልቋል? ለተጠቃሚዎች የሚታየውን ምክንያት ያስገቡ (ለምሳሌ: For today out of stock / ለጊዜው አልቋል):", "ለጊዜው አልቋል (Out of Stock)");
+                reason = prompt("ይህ ምግብ አልቋል? ለተጠቃሚዎች የሚታየውን ምክንያት ያስገቡ:", "ለጊዜው አልቋል (Out of Stock)");
                 if(reason === null) return;
             }
             const newStatus = currentStatus ? 0 : 1;
@@ -239,6 +242,16 @@
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ is_available: newStatus, unavailable_reason: reason })
+            });
+            loadAdminData();
+        }
+
+        async function toggleSpecial(id, currentSpecial) {
+            const newSpecial = currentSpecial ? 0 : 1;
+            await fetch(`/api/menu/special/${id}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ is_featured: newSpecial })
             });
             loadAdminData();
         }
