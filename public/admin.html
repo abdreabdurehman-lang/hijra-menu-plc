@@ -21,27 +21,24 @@
         .btn { background: var(--gold); color: #000; border: none; padding: 12px 25px; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.2s; }
         .btn:hover { opacity: 0.9; transform: translateY(-2px); }
         .btn-danger { background: #e74c3c; color: #fff; padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; border: none; cursor: pointer; }
-        .btn-status { background: #27ae60; color: #fff; padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; border: none; cursor: pointer; margin-right: 5px; font-weight: bold; }
-        .btn-status.inactive { background: #c0392b; }
         .btn-special { background: #3498db; color: #fff; padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; border: none; cursor: pointer; margin-right: 5px; }
         .btn-special.active { background: #f39c12; font-weight: bold; }
+        .btn-stock { background: #e67e22; color: #fff; padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; border: none; cursor: pointer; margin-right: 5px; font-weight: bold; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; }
         th, td { padding: 12px; text-align: left; border-bottom: 1px solid #333; }
         th { color: var(--gold); background: #181818; }
-        .feedback-card { background: #181818; border: 1px solid #333; padding: 15px; border-radius: 10px; margin-bottom: 10px; }
-        .feedback-header { display: flex; justify-content: space-between; margin-bottom: 6px; font-weight: bold; color: var(--gold); }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="admin-header">
             <h1><i class="fas fa-crown"></i> Hijra Restaurant Admin Dashboard</h1>
-            <p>Manage menu items, availability status, profile, and customer feedbacks.</p>
+            <p>Manage menu items, stock status, social media links, and profile.</p>
         </div>
 
-        <!-- Restaurant Settings & Logo & Bio -->
+        <!-- Restaurant Settings, Logo & Social Media Links -->
         <div class="section">
-            <h2><i class="fas fa-store"></i> Restaurant Profile, Logo & Subtitle (Bio)</h2>
+            <h2><i class="fas fa-store"></i> Restaurant Profile, Logo, Developer WhatsApp & Social Links</h2>
             <form id="settingsForm" onsubmit="updateSettings(event)">
                 <div class="form-grid">
                     <div>
@@ -56,16 +53,42 @@
                         <label style="color:var(--text-muted); font-size:0.85rem;">Address / Location:</label>
                         <input type="text" id="setAddress" required>
                     </div>
+                    <div>
+                        <label style="color:var(--text-muted); font-size:0.85rem;"><i class="fab fa-whatsapp"></i> Developer WhatsApp Link:</label>
+                        <input type="text" id="setDevLink" placeholder="https://wa.me/2519...">
+                    </div>
                 </div>
                 <div style="margin-bottom: 15px;">
                     <label style="color:var(--text-muted); font-size:0.85rem;">Subtitle / Bio Description:</label>
                     <textarea id="setSubtitle" required></textarea>
                 </div>
-                <div style="margin-bottom: 15px;">
+                <div class="form-grid" style="margin-top: 15px;">
+                    <div>
+                        <label style="color:var(--text-muted); font-size:0.85rem;"><i class="fab fa-tiktok"></i> TikTok Link:</label>
+                        <input type="text" id="setTiktok" placeholder="https://tiktok.com/@...">
+                    </div>
+                    <div>
+                        <label style="color:var(--text-muted); font-size:0.85rem;"><i class="fab fa-instagram"></i> Instagram Link:</label>
+                        <input type="text" id="setInstagram" placeholder="https://instagram.com/...">
+                    </div>
+                    <div>
+                        <label style="color:var(--text-muted); font-size:0.85rem;"><i class="fab fa-whatsapp"></i> Restaurant WhatsApp:</label>
+                        <input type="text" id="setWhatsapp" placeholder="https://wa.me/...">
+                    </div>
+                    <div>
+                        <label style="color:var(--text-muted); font-size:0.85rem;"><i class="fab fa-facebook"></i> Facebook Link:</label>
+                        <input type="text" id="setFacebook" placeholder="https://facebook.com/...">
+                    </div>
+                    <div>
+                        <label style="color:var(--text-muted); font-size:0.85rem;"><i class="fas fa-envelope"></i> Email Address:</label>
+                        <input type="email" id="setEmail" placeholder="info@hijra.com">
+                    </div>
+                </div>
+                <div style="margin: 15px 0;">
                     <label style="color:var(--text-muted); font-size:0.85rem;">Restaurant Logo Image:</label>
                     <input type="file" id="logoFile" accept="image/*">
                 </div>
-                <button type="submit" class="btn"><i class="fas fa-save"></i> Save Profile Settings</button>
+                <button type="submit" class="btn"><i class="fas fa-save"></i> Save All Settings</button>
             </form>
         </div>
 
@@ -91,7 +114,7 @@
             </form>
         </div>
 
-        <!-- Manage Menu Items & Stock Status -->
+        <!-- Manage Menu Items, Stock Status & Special -->
         <div class="section">
             <h2><i class="fas fa-list"></i> Menu Items, Stock Status & Special Selector</h2>
             <div style="overflow-x: auto;">
@@ -125,14 +148,6 @@
             </form>
             <div style="margin-top: 15px;" id="paymentList"></div>
         </div>
-
-        <!-- Customer Feedbacks & Ratings -->
-        <div class="section">
-            <h2><i class="fas fa-comments"></i> Customer Feedbacks & Ratings</h2>
-            <div id="feedbackContainer">
-                <p style="color: var(--text-muted);">Loading feedbacks...</p>
-            </div>
-        </div>
     </div>
 
     <script>
@@ -145,6 +160,12 @@
             document.getElementById('setHours').value = settings.working_hours || '';
             document.getElementById('setAddress').value = settings.address || '';
             document.getElementById('setSubtitle').value = settings.subtitle || '';
+            document.getElementById('setDevLink').value = settings.developer_link || '';
+            document.getElementById('setTiktok').value = settings.social_tiktok || '';
+            document.getElementById('setInstagram').value = settings.social_instagram || '';
+            document.getElementById('setWhatsapp').value = settings.social_whatsapp || '';
+            document.getElementById('setFacebook').value = settings.social_facebook || '';
+            document.getElementById('setEmail').value = settings.social_email || '';
             currentLogoUrl = settings.logo_url || '';
 
             const resMenu = await fetch('/api/menu');
@@ -152,8 +173,8 @@
             const tbody = document.getElementById('menuTableBody');
             tbody.innerHTML = '';
             menu.forEach(item => {
-                const isAvail = item.is_available === 1;
                 const isSpecial = item.is_featured === 1;
+                const isOutOfStock = item.is_available === 0;
                 tbody.innerHTML += `
                     <tr>
                         <td><img src="${item.image_url || 'https://via.placeholder.com/50'}" style="width:40px; height:40px; object-fit:cover; border-radius:6px;"></td>
@@ -161,8 +182,8 @@
                         <td>${item.category}</td>
                         <td>${item.price} Birr</td>
                         <td>
-                            <button class="btn-status ${isAvail ? '' : 'inactive'}" onclick="toggleStatus(${item.id}, ${isAvail})">
-                                ${isAvail ? '🟢 Available' : '🔴 Out of Stock'}
+                            <button class="btn-stock" style="background: ${isOutOfStock ? '#c0392b' : '#27ae60'};" onclick="toggleStock(${item.id}, ${item.is_available})">
+                                ${isOutOfStock ? '🔴 Out of Stock (Click to In Stock)' : '🟢 In Stock (Click to Out of Stock)'}
                             </button>
                         </td>
                         <td>
@@ -171,7 +192,7 @@
                             </button>
                         </td>
                         <td>
-                            <button class="btn-danger" onclick="deleteMenu(${item.id})"><i class="fas fa-trash"></i></button>
+                            <button class="btn-danger" onclick="deleteMenu(${item.id})"><i class="fas fa-trash"></i> Delete</button>
                         </td>
                     </tr>
                 `;
@@ -189,30 +210,6 @@
                     </div>
                 `;
             });
-
-            const resFb = await fetch('/api/feedback');
-            const feedbacks = await resFb.json();
-            const fbContainer = document.getElementById('feedbackContainer');
-            fbContainer.innerHTML = '';
-            if(feedbacks.length === 0) {
-                fbContainer.innerHTML = `<p style="color: var(--text-muted);">No feedback received yet.</p>`;
-            } else {
-                feedbacks.forEach(f => {
-                    fbContainer.innerHTML += `
-                        <div class="feedback-card">
-                            <div class="feedback-header">
-                                <span><i class="fas fa-user"></i> ${f.name} (${f.contact})</span>
-                                <span style="color: var(--gold);">${f.rating}</span>
-                            </div>
-                            <p style="color: #ddd; margin-bottom: 8px;">${f.message}</p>
-                            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: #888;">
-                                <span>${f.created_at}</span>
-                                <button class="btn-danger" onclick="deleteFeedback(${f.id})">Delete</button>
-                            </div>
-                        </div>
-                    `;
-                });
-            }
         }
 
         async function updateSettings(e) {
@@ -222,6 +219,12 @@
             formData.append('working_hours', document.getElementById('setHours').value);
             formData.append('address', document.getElementById('setAddress').value);
             formData.append('subtitle', document.getElementById('setSubtitle').value);
+            formData.append('developer_link', document.getElementById('setDevLink').value);
+            formData.append('social_tiktok', document.getElementById('setTiktok').value);
+            formData.append('social_instagram', document.getElementById('setInstagram').value);
+            formData.append('social_whatsapp', document.getElementById('setWhatsapp').value);
+            formData.append('social_facebook', document.getElementById('setFacebook').value);
+            formData.append('social_email', document.getElementById('setEmail').value);
             formData.append('old_logo_url', currentLogoUrl);
             
             const logoInput = document.getElementById('logoFile').files[0];
@@ -231,17 +234,12 @@
             if(res.ok) { alert('Settings updated successfully!'); location.reload(); }
         }
 
-        async function toggleStatus(id, currentStatus) {
-            let reason = '';
-            if(currentStatus) {
-                reason = prompt("ይህ ምግብ አልቋል? ለተጠቃሚዎች የሚታየውን ምክንያት ያስገቡ:", "ለጊዜው አልቋል (Out of Stock)");
-                if(reason === null) return;
-            }
-            const newStatus = currentStatus ? 0 : 1;
+        async function toggleStock(id, currentAvail) {
+            const newAvail = currentAvail === 1 ? 0 : 1;
             await fetch(`/api/menu/status/${id}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ is_available: newStatus, unavailable_reason: reason })
+                body: JSON.stringify({ is_available: newAvail })
             });
             loadAdminData();
         }
@@ -295,13 +293,6 @@
         async function deletePayment(id) {
             if(confirm('Delete payment account?')) {
                 await fetch(`/api/payments/${id}`, { method: 'DELETE' });
-                loadAdminData();
-            }
-        }
-
-        async function deleteFeedback(id) {
-            if(confirm('Delete this feedback?')) {
-                await fetch(`/api/feedback/${id}`, { method: 'DELETE' });
                 loadAdminData();
             }
         }
